@@ -1,5 +1,5 @@
-
 import { MessageCircle, BookOpenCheck, MapPinned } from "lucide-react";
+import "../styles/home.css";
 
 const steps = [
   {
@@ -27,45 +27,45 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="bg-[#f8fbfa] px-6 py-24">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-16 text-center">
-          <span className="rounded-full bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700">
+    <section className="care-steps">
+      <div className="care-steps-container">
+        <div className="care-steps-header">
+          <span className="care-steps-badge">
             Simple & Accessible
           </span>
 
-          <h2 className="mt-6 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-            How <span className="text-teal-600">CarePath</span> Works
+          <h2 className="care-steps-title">
+            How <span>CarePath</span> Works
           </h2>
 
-          <p className="mx-auto mt-5 max-w-2xl text-lg text-slate-500">
+          <p className="care-steps-description">
             Three simple steps to explore health information
             and discover useful resources.
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="care-steps-grid">
           {steps.map((step) => {
             const Icon = step.icon;
 
             return (
               <article
                 key={step.number}
-                className="relative rounded-3xl border border-slate-100 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                className="care-step-card"
               >
-                <span className="absolute right-8 top-7 text-5xl font-extrabold text-slate-100">
+                <span className="care-step-number">
                   {step.number}
                 </span>
 
-                <div className="relative mb-7 flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-50 text-teal-600">
+                <div className="care-step-icon">
                   <Icon size={29} strokeWidth={1.8} />
                 </div>
 
-                <h3 className="mb-4 text-xl font-bold text-slate-900">
+                <h3 className="care-step-title">
                   {step.title}
                 </h3>
 
-                <p className="leading-relaxed text-slate-500">
+                <p className="care-step-description">
                   {step.description}
                 </p>
               </article>
