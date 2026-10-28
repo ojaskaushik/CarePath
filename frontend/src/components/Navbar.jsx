@@ -1,7 +1,7 @@
-
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { HeartPulse, Menu, X } from "lucide-react";
+import "../styles/navbar.css";
 
 const links = [
   { label: "Home", path: "/" },
@@ -15,32 +15,29 @@ export default function Navbar() {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/95 backdrop-blur-md">
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-10">
+    <header className="care-navbar">
+      <nav className="care-navbar-container">
         <Link
           to="/"
           onClick={closeMenu}
-          className="flex items-center gap-3"
+          className="care-navbar-brand"
         >
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-600 text-white">
+          <div className="care-navbar-logo">
             <HeartPulse size={25} strokeWidth={2.2} />
           </div>
-          <span className="text-2xl font-bold tracking-tight text-slate-900">
-            Care<span className="text-teal-600">Path</span>
+
+          <span className="care-navbar-brand-name">
+            Care<span>Path</span>
           </span>
         </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="care-navbar-links">
           {links.map((link) => (
             <NavLink
               key={link.path}
               to={link.path}
               className={({ isActive }) =>
-                `text-sm font-medium transition-colors ${
-                  isActive
-                    ? "text-teal-600"
-                    : "text-slate-600 hover:text-teal-600"
-                }`
+                `care-navbar-link ${isActive ? "active" : ""}`
               }
             >
               {link.label}
@@ -48,25 +45,20 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="hidden items-center gap-4 md:flex">
-          <Link
-            to="/login"
-            className="text-sm font-semibold text-slate-700 hover:text-teal-600"
-          >
+        <div className="care-navbar-actions">
+          <Link to="/login" className="care-navbar-login">
             Log In
           </Link>
-          <Link
-            to="/signup"
-            className="rounded-full bg-teal-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-teal-700"
-          >
+
+          <Link to="/signup" className="care-navbar-signup">
             Sign Up
           </Link>
         </div>
 
         <button
           type="button"
-          className="rounded-lg p-2 text-slate-700 md:hidden"
-          onClick={() => setMenuOpen(!menuOpen)}
+          className="care-navbar-toggle"
+          onClick={() => setMenuOpen((open) => !open)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           aria-controls="mobile-navigation"
@@ -78,25 +70,27 @@ export default function Navbar() {
       {menuOpen && (
         <div
           id="mobile-navigation"
-          className="border-t border-slate-100 bg-white px-6 py-5 md:hidden"
+          className="care-navbar-mobile"
         >
-          <div className="flex flex-col gap-5">
+          <div className="care-navbar-mobile-content">
             {links.map((link) => (
               <NavLink
                 key={link.path}
                 to={link.path}
                 onClick={closeMenu}
-                className="font-medium text-slate-700 hover:text-teal-600"
+                className={({ isActive }) =>
+                  `care-navbar-mobile-link ${isActive ? "active" : ""}`
+                }
               >
                 {link.label}
               </NavLink>
             ))}
 
-            <div className="border-t border-slate-100 pt-5">
+            <div className="care-navbar-mobile-actions">
               <Link
                 to="/login"
                 onClick={closeMenu}
-                className="block py-2 font-medium text-slate-700"
+                className="care-navbar-mobile-login"
               >
                 Log In
               </Link>
@@ -104,7 +98,7 @@ export default function Navbar() {
               <Link
                 to="/signup"
                 onClick={closeMenu}
-                className="mt-3 block rounded-full bg-teal-600 px-5 py-3 text-center font-semibold text-white"
+                className="care-navbar-mobile-signup"
               >
                 Sign Up
               </Link>
