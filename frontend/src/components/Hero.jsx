@@ -1,5 +1,6 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   ArrowRight,
   HeartPulse,
@@ -18,18 +19,18 @@ export default function Hero() {
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSearch = (event) => {
-    event.preventDefault();
+ const handleSearch = (event) => {
+  event.preventDefault();
 
-    if (!query.trim()) {
-      setMessage("Please describe how you're feeling.");
-      return;
-    }
+  if (!query.trim()) {
+    setMessage("Please describe how you're feeling.");
+    return;
+  }
 
-    setMessage(
-      "Your question is ready! Symptom guidance is coming soon."
-    );
-  };
+  navigate("/chat", {
+    state: { initialQuestion: query.trim() },
+  });
+};
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-teal-50 via-white to-white px-6 pb-24 pt-20 sm:pt-28">
