@@ -1,0 +1,308 @@
+
+/* ========================================
+   CarePath Homepage - Hero Section
+======================================== */
+
+.care-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 80px 24px 96px;
+  background: linear-gradient(
+    to bottom,
+    #f0fdfa 0%,
+    #ffffff 55%,
+    #ffffff 100%
+  );
+}
+
+/* Background Effects */
+
+.care-hero-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(64px);
+}
+
+.care-hero-glow-right {
+  top: 0;
+  right: -128px;
+  width: 384px;
+  height: 384px;
+  background: rgba(204, 251, 241, 0.6);
+}
+
+.care-hero-glow-left {
+  top: 208px;
+  left: -128px;
+  width: 320px;
+  height: 320px;
+  background: rgba(209, 250, 229, 0.5);
+}
+
+/* Main Container */
+
+.care-hero-container {
+  position: relative;
+  max-width: 1024px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Intro Badge */
+
+.care-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  padding: 8px 20px;
+  border: 1px solid #ccfbf1;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #0f766e;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Headline */
+
+.care-hero-title {
+  max-width: 896px;
+  margin: 0 auto;
+  color: #0f172a;
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.care-hero-title span {
+  display: block;
+  margin-top: 8px;
+  background: linear-gradient(
+    to right,
+    #0d9488,
+    #10b981
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Description */
+
+.care-hero-description {
+  max-width: 672px;
+  margin: 28px auto 0;
+  color: #475569;
+  font-size: 18px;
+  line-height: 1.625;
+}
+
+/* Search Form */
+
+.care-hero-search {
+  max-width: 672px;
+  margin: 48px auto 0;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 20px 25px -5px rgba(19, 78, 74, 0.05);
+}
+
+.care-hero-search-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.care-hero-search-icon {
+  flex-shrink: 0;
+  margin-left: 12px;
+  color: #0d9488;
+}
+
+.care-hero-input {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 0;
+  border: none;
+  background: transparent;
+  color: #1e293b;
+  font-family: inherit;
+  font-size: 16px;
+  outline: none;
+}
+
+.care-hero-input::placeholder {
+  color: #94a3b8;
+}
+
+.care-hero-submit {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 20px;
+  border: none;
+  border-radius: 16px;
+  background: #0d9488;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.care-hero-submit:hover {
+  background: #0f766e;
+}
+
+.care-hero-message {
+  max-width: 576px;
+  margin: 16px auto 0;
+  color: #0f766e;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Example Questions */
+
+.care-hero-examples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.care-hero-examples-label {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.care-hero-example {
+  padding: 8px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #475569;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.care-hero-example:hover {
+  border-color: #5eead4;
+  color: #0f766e;
+}
+
+/* Benefits */
+
+.care-hero-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 56px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.care-hero-benefits span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.care-hero-benefits svg {
+  color: #0d9488;
+}
+
+/* Disclaimer */
+
+.care-hero-disclaimer {
+  max-width: 672px;
+  margin: 32px auto 0;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1.625;
+}
+
+/* Accessibility */
+
+.care-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.care-hero button:focus-visible,
+.care-hero input:focus-visible {
+  outline: 3px solid #0d9488;
+  outline-offset: 3px;
+}
+
+/* Responsive Design */
+
+@media (min-width: 640px) {
+  .care-hero {
+    padding-top: 112px;
+  }
+
+  .care-hero-title {
+    font-size: 60px;
+  }
+
+  .care-hero-description {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .care-hero-title {
+    font-size: 72px;
+  }
+}
+
+@media (max-width: 639px) {
+  .care-hero-submit span {
+    display: none;
+  }
+
+  .care-hero-submit {
+    padding: 16px;
+  }
+
+  .care-hero-badge {
+    max-width: 100%;
+    font-size: 12px;
+  }
+
+  .care-hero-benefits {
+    gap: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .care-hero-submit,
+  .care-hero-example {
+    transition: none;
+  }
+}
