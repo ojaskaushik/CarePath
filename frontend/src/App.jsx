@@ -6,6 +6,7 @@ import Chat from "./pages/Chat";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Pharmacies from "./pages/Pharmacies";
+import HowItWorksPage from "./pages/HowItWorksPage";
 
 export default function App() {
   return (
@@ -19,12 +20,7 @@ export default function App() {
 
         <Route
           path="/how-it-works"
-          element={
-            <ComingSoon
-              title="How CarePath Works"
-              description="We're building a simple way to explore health information and understand your next steps."
-            />
-          }
+          element={<HowItWorksPage />}
         />
 
         <Route
