@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import ComingSoon from "./pages/ComingSoon";
+import Chat from "./pages/Chat";
 
 export default function App() {
   return (
@@ -10,6 +11,8 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+
+        <Route path="/chat" element={<Chat />} />
 
         <Route
           path="/how-it-works"
@@ -27,26 +30,6 @@ export default function App() {
             <ComingSoon
               title="Find Pharmacies"
               description="Our Canadian pharmacy discovery experience is coming soon."
-            />
-          }
-        />
-
-        <Route
-          path="/login"
-          element={
-            <ComingSoon
-              title="Welcome Back"
-              description="Account login is currently under development. Guest access will remain available."
-            />
-          }
-        />
-
-        <Route
-          path="/signup"
-          element={
-            <ComingSoon
-              title="Join CarePath"
-              description="Soon you'll be able to create an account and save your conversations."
             />
           }
         />
