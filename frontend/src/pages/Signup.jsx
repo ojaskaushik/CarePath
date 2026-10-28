@@ -1,6 +1,6 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
 import {
   ArrowRight,
   Eye,
@@ -12,44 +12,46 @@ import {
   UserRound,
 } from "lucide-react";
 
+import "../styles/auth.css";
+
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <main className="flex min-h-[calc(100vh-80px)] items-center justify-center bg-[#f8fbfa] px-5 py16">
-      <div className="w-full max-w-md">
-        <div className="mb-9 text-center">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-50 text-teal-600">
+    <main className="care-auth-page">
+      <div className="care-auth-container">
+        <div className="care-auth-header">
+          <div className="care-auth-logo">
             <HeartPulse size={32} strokeWidth={1.8} />
           </div>
 
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="care-auth-title">
             Create your account
           </h1>
 
-          <p className="mt-3 text-slate-500">
+          <p className="care-auth-subtitle">
             Join CarePath to save and revisit your conversations.
           </p>
         </div>
 
-        <div className="rounded-3xl border border-slate-100 bg-white p-8 shadow-xl shadow-teal-900/5">
+        <div className="care-auth-card">
           <form
             onSubmit={(event) => event.preventDefault()}
-            className="space-y-5"
+            className="care-auth-form care-auth-signup-form"
           >
-            <div>
+            <div className="care-auth-field">
               <label
                 htmlFor="signup-name"
-                className="mb-2 block text-sm font-semibold text-slate-700"
+                className="care-auth-label"
               >
                 Full name
               </label>
 
-              <div className="relative">
+              <div className="care-auth-input-wrapper">
                 <UserRound
                   size={19}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="care-auth-input-icon"
                 />
 
                 <input
@@ -58,23 +60,23 @@ export default function Signup() {
                   autoComplete="name"
                   placeholder="Your full name"
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
+                  className="care-auth-input"
                 />
               </div>
             </div>
 
-            <div>
+            <div className="care-auth-field">
               <label
                 htmlFor="signup-email"
-                className="mb-2 block text-sm font-semibold text-slate-700"
+                className="care-auth-label"
               >
                 Email address
               </label>
 
-              <div className="relative">
+              <div className="care-auth-input-wrapper">
                 <Mail
                   size={19}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="care-auth-input-icon"
                 />
 
                 <input
@@ -83,23 +85,23 @@ export default function Signup() {
                   autoComplete="email"
                   placeholder="you@example.com"
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
+                  className="care-auth-input"
                 />
               </div>
             </div>
 
-            <div>
+            <div className="care-auth-field">
               <label
                 htmlFor="signup-password"
-                className="mb-2 block text-sm font-semibold text-slate-700"
+                className="care-auth-label"
               >
                 Password
               </label>
 
-              <div className="relative">
+              <div className="care-auth-input-wrapper">
                 <LockKeyhole
                   size={19}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="care-auth-input-icon"
                 />
 
                 <input
@@ -109,36 +111,42 @@ export default function Signup() {
                   placeholder="Create a password"
                   minLength={8}
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-12 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
+                  className="care-auth-input care-auth-password-input"
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-600"
+                  aria-label={
+                    showPassword ? "Hide password" : "Show password"
+                  }
+                  className="care-auth-password-toggle"
                 >
-                  {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                  {showPassword ? (
+                    <EyeOff size={19} />
+                  ) : (
+                    <Eye size={19} />
+                  )}
                 </button>
               </div>
 
-              <p className="mt-2 text-xs text-slate-400">
+              <p className="care-auth-field-hint">
                 Use at least 8 characters.
               </p>
             </div>
 
-            <div>
+            <div className="care-auth-field">
               <label
                 htmlFor="signup-confirm"
-                className="mb-2 block text-sm font-semibold text-slate-700"
+                className="care-auth-label"
               >
                 Confirm password
               </label>
 
-              <div className="relative">
+              <div className="care-auth-input-wrapper">
                 <LockKeyhole
                   size={19}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="care-auth-input-icon"
                 />
 
                 <input
@@ -147,20 +155,26 @@ export default function Signup() {
                   autoComplete="new-password"
                   placeholder="Confirm your password"
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-12 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
+                  className="care-auth-input care-auth-password-input"
                 />
 
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
                   aria-label={
                     showConfirmPassword
                       ? "Hide confirmation password"
                       : "Show confirmation password"
                   }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-teal-600"
+                  className="care-auth-password-toggle"
                 >
-                  {showConfirmPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                  {showConfirmPassword ? (
+                    <EyeOff size={19} />
+                  ) : (
+                    <Eye size={19} />
+                  )}
                 </button>
               </div>
             </div>
@@ -168,37 +182,37 @@ export default function Signup() {
             <button
               type="submit"
               disabled
-              className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 py-3.5 font-semibold text-white opacity-60"
+              className="care-auth-submit"
             >
               Create Account
               <ArrowRight size={18} />
             </button>
 
-            <p className="text-center text-xs text-slate-400">
+            <p className="care-auth-coming-soon">
               Account creation is coming soon.
             </p>
           </form>
 
-          <div className="mt-7 border-t border-slate-100 pt-7 text-center text-sm text-slate-500">
+          <div className="care-auth-card-footer">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="font-semibold text-teal-600 hover:text-teal-700"
+              className="care-auth-link"
             >
               Sign in
             </Link>
           </div>
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="care-auth-bottom">
           <Link
             to="/chat"
-            className="font-semibold text-teal-600 hover:text-teal-700"
+            className="care-auth-link"
           >
             Continue as guest
           </Link>
 
-          <p className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-400">
+          <p className="care-auth-privacy">
             <ShieldCheck size={15} />
             Your privacy matters.
           </p>
