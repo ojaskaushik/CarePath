@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MapPin, Search, Navigation } from "lucide-react";
+import "../styles/pharmacies.css";
 
 export default function PharmacySearch({ onSearch }) {
   const [location, setLocation] = useState("");
@@ -20,19 +21,22 @@ export default function PharmacySearch({ onSearch }) {
   };
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="care-pharmacy-search">
       <form
         onSubmit={handleSubmit}
-        className="rounded-3xl border border-slate-200 bg-white p-3 shadow-xl shadow-teal-900/5 sm:p-4"
+        className="care-pharmacy-search-form"
       >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="flex flex-1 items-center gap-3 px-3">
+        <div className="care-pharmacy-search-row">
+          <div className="care-pharmacy-input-wrapper">
             <MapPin
               size={22}
-              className="shrink-0 text-teal-600"
+              className="care-pharmacy-location-icon"
             />
 
-            <label htmlFor="pharmacy-location" className="sr-only">
+            <label
+              htmlFor="pharmacy-location"
+              className="care-pharmacy-sr-only"
+            >
               City or postal code
             </label>
 
@@ -46,13 +50,13 @@ export default function PharmacySearch({ onSearch }) {
               }}
               placeholder="Enter a city or postal code"
               maxLength={120}
-              className="w-full bg-transparent py-3 text-sm text-slate-800 outline-none placeholder:text-slate-400 sm:text-base"
+              className="care-pharmacy-input"
             />
           </div>
 
           <button
             type="submit"
-            className="flex items-center justify-center gap-2 rounded-2xl bg-teal-600 px-7 py-4 font-semibold text-white transition hover:bg-teal-700"
+            className="care-pharmacy-search-button"
           >
             <Search size={19} />
             Find Pharmacies
@@ -61,13 +65,13 @@ export default function PharmacySearch({ onSearch }) {
       </form>
 
       {error && (
-        <p role="alert" className="mt-3 text-sm text-red-600">
+        <p role="alert" className="care-pharmacy-error">
           {error}
         </p>
       )}
 
-      <p className="mt-5 flex items-center justify-center gap-2 text-center text-sm text-slate-500">
-        <Navigation size={16} className="text-teal-600" />
+      <p className="care-pharmacy-search-note">
+        <Navigation size={16} />
         Starting with Canadian pharmacies
       </p>
     </div>
