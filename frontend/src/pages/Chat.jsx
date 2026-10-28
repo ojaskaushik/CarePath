@@ -1,6 +1,6 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+
 import {
   ArrowLeft,
   ArrowUp,
@@ -10,6 +10,8 @@ import {
   Save,
   ShieldCheck,
 } from "lucide-react";
+
+const STORAGE_KEY = "carepath-guest-chat";
 
 const developmentResponse =
   "Thanks for sharing your question. CarePath's personalized health guidance is still under development. This is currently a demonstration conversation, not a medical assessment. If your symptoms are severe, worsening, or concerning, contact a healthcare professional. For a medical emergency in Canada, call 911.";
@@ -21,6 +23,56 @@ const welcomeMessage = {
     "Welcome to CarePath! You can describe your health concern here. Our personalized health guidance feature is currently under development.",
 };
 
+function getInitialMessages(initialQuestion) {
+  if (!initialQuestion) {
+    return [welcomeMessage];
+  }
+
+  return [
+    welcomeMessage,
+    {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: initialQuestion,
+    },
+    {
+      id: crypto.randomUUID(),
+      role: "assistant",
+      content: developmentResponse,
+    },
+  ];
+}
+
+function loadMessages(initialQuestion) {
+  if (initialQuestion) {
+    return getInitialMessages(initialQuestion);
+  }
+
+  try {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+
+    if (saved) {
+      const parsed = JSON.parse(saved);
+
+      if (
+        Array.isArray(parsed) &&
+        parsed.every(
+          (message) =>
+            typeof message.id === "string" &&
+            ["user", "assistant"].includes(message.role) &&
+            typeof message.content === "string"
+        )
+      ) {
+        return parsed;
+      }
+    }
+  } catch {
+    // Continue with a new guest chat.
+  }
+
+  return [welcomeMessage];
+}
+
 export default function Chat() {
   const location = useLocation();
 
@@ -29,27 +81,32 @@ export default function Chat() {
       ? location.state.initialQuestion.trim().slice(0, 2000)
       : "";
 
-  const [messages, setMessages] = useState(() => {
-    if (!initialQuestion) {
-      return [welcomeMessage];
-    }
-
-    return [
-      welcomeMessage,
-      {
-        id: "initial-question",
-        role: "user",
-        content: initialQuestion,
-      },
-      {
-        id: "initial-response",
-        role: "assistant",
-        content: developmentResponse,
-      },
-    ];
-  });
+  const [messages, setMessages] = useState(() =>
+    loadMessages(initialQuestion)
+  );
 
   const [input, setInput] = useState("");
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(messages)
+      );
+    } catch {
+      // Chat remains usable if browser storage is unavailable.
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (initialQuestion) {
+      window.history.replaceState(
+        { ...window.history.state, usr: null },
+        "",
+        window.location.pathname
+      );
+    }
+  }, [initialQuestion]);
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -75,9 +132,30 @@ export default function Chat() {
     setInput("");
   };
 
+  const handleKeyDown = (event) => {
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey &&
+      !event.nativeEvent.isComposing
+    ) {
+      event.preventDefault();
+
+      if (input.trim()) {
+        event.currentTarget.form?.requestSubmit();
+      }
+    }
+  };
+
   const newChat = () => {
     setMessages([welcomeMessage]);
     setInput("");
+
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // Continue without browser storage.
+    }
+
     window.history.replaceState(
       { ...window.history.state, usr: null },
       "",
@@ -178,6 +256,7 @@ export default function Chat() {
                 id="chat-input"
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
+                onKeyDown={handleKeyDown}
                 placeholder="Describe how you're feeling..."
                 rows={2}
                 maxLength={2000}
