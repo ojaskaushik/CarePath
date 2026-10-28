@@ -43,36 +43,6 @@ function getInitialMessages(initialQuestion) {
   ];
 }
 
-function loadMessages(initialQuestion) {
-  if (initialQuestion) {
-    return getInitialMessages(initialQuestion);
-  }
-
-  try {
-    const saved = sessionStorage.getItem(STORAGE_KEY);
-
-    if (saved) {
-      const parsed = JSON.parse(saved);
-
-      if (
-        Array.isArray(parsed) &&
-        parsed.every(
-          (message) =>
-            typeof message.id === "string" &&
-            ["user", "assistant"].includes(message.role) &&
-            typeof message.content === "string"
-        )
-      ) {
-        return parsed;
-      }
-    }
-  } catch {
-    // Continue with a new guest chat.
-  }
-
-  return [welcomeMessage];
-}
-
 export default function Chat() {
   const location = useLocation();
 
@@ -82,23 +52,20 @@ export default function Chat() {
       : "";
 
   const [messages, setMessages] = useState(() =>
-    loadMessages(initialQuestion)
+    getInitialMessages(initialQuestion)
   );
 
   const [input, setInput] = useState("");
 
   useEffect(() => {
+    // Remove guest chat data saved by the previous version.
     try {
-      sessionStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(messages)
-      );
+      sessionStorage.removeItem(STORAGE_KEY);
     } catch {
-      // Chat remains usable if browser storage is unavailable.
+      // Continue if browser storage is unavailable.
     }
-  }, [messages]);
 
-  useEffect(() => {
+    // Clear the homepage question from navigation history.
     if (initialQuestion) {
       window.history.replaceState(
         { ...window.history.state, usr: null },
@@ -149,12 +116,6 @@ export default function Chat() {
   const newChat = () => {
     setMessages([welcomeMessage]);
     setInput("");
-
-    try {
-      sessionStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // Continue without browser storage.
-    }
 
     window.history.replaceState(
       { ...window.history.state, usr: null },
