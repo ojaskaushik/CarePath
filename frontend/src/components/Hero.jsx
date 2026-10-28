@@ -16,21 +16,23 @@ const examples = [
 ];
 
 export default function Hero() {
+  const navigate = useNavigate();
+
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState("");
 
- const handleSearch = (event) => {
-  event.preventDefault();
+  const handleSearch = (event) => {
+    event.preventDefault();
 
-  if (!query.trim()) {
-    setMessage("Please describe how you're feeling.");
-    return;
-  }
+    if (!query.trim()) {
+      setMessage("Please describe how you're feeling.");
+      return;
+    }
 
-  navigate("/chat", {
-    state: { initialQuestion: query.trim() },
-  });
-};
+    navigate("/chat", {
+      state: { initialQuestion: query.trim() },
+    });
+  };
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-teal-50 via-white to-white px-6 pb-24 pt-20 sm:pt-28">
