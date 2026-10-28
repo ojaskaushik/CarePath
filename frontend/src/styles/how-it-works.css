@@ -1,0 +1,434 @@
+
+/* ========================================
+   CarePath - How It Works Page
+======================================== */
+
+.care-how-page {
+  background-color: #ffffff;
+}
+
+/* Shared Layout */
+
+.care-how-container {
+  max-width: 1152px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   Hero Section
+======================================== */
+
+.care-how-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 96px 24px;
+  background-color: #f8fbfa;
+}
+
+.care-how-glow {
+  position: absolute;
+  width: 384px;
+  height: 384px;
+  border-radius: 50%;
+  filter: blur(64px);
+  pointer-events: none;
+}
+
+.care-how-glow-right {
+  top: -128px;
+  right: -80px;
+  background-color: rgba(204, 251, 241, 0.6);
+}
+
+.care-how-glow-left {
+  bottom: -128px;
+  left: -80px;
+  background-color: rgba(209, 250, 229, 0.6);
+}
+
+.care-how-hero-container {
+  position: relative;
+  max-width: 896px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.care-how-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border: 1px solid #ccfbf1;
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #0f766e;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.care-how-hero-title {
+  margin-top: 32px;
+  color: #0f172a;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.care-how-hero-title span {
+  display: block;
+  margin-top: 8px;
+  color: #0d9488;
+}
+
+.care-how-hero-description {
+  max-width: 672px;
+  margin: 28px auto 0;
+  color: #64748b;
+  font-size: 18px;
+  line-height: 1.625;
+}
+
+.care-how-primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 36px;
+  padding: 16px 28px;
+  border-radius: 12px;
+  background-color: #0d9488;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.care-how-primary-button:hover {
+  background-color: #0f766e;
+}
+
+.care-how-demo-note {
+  margin-top: 16px;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* ========================================
+   Process Section
+======================================== */
+
+.care-how-process {
+  padding: 96px 24px;
+}
+
+.care-how-section-header {
+  margin-bottom: 64px;
+  text-align: center;
+}
+
+.care-how-eyebrow {
+  color: #0d9488;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.care-how-section-title {
+  color: #0f172a;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.care-how-section-header .care-how-section-title {
+  margin-top: 16px;
+}
+
+.care-how-section-description {
+  max-width: 672px;
+  margin: 20px auto 0;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Step Cards */
+
+.care-how-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.care-how-step-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  padding: 32px;
+  border: 1px solid #f1f5f9;
+  border-radius: 24px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+}
+
+.care-how-step-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.care-how-step-visual {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.care-how-step-number {
+  color: #ccfbf1;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.care-how-step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background-color: #f0fdfa;
+  color: #0d9488;
+}
+
+.care-how-step-title {
+  color: #0f172a;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.care-how-step-description {
+  max-width: 768px;
+  margin-top: 16px;
+  color: #64748b;
+  line-height: 1.625;
+}
+
+.care-how-step-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.care-how-step-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: #475569;
+  font-size: 14px;
+}
+
+.care-how-check-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #14b8a6;
+}
+
+/* ========================================
+   Benefits Section
+======================================== */
+
+.care-how-benefits {
+  padding: 96px 24px;
+  background-color: #f8fbfa;
+}
+
+.care-how-benefits-header {
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.care-how-benefits-header .care-how-section-description {
+  margin-top: 16px;
+}
+
+.care-how-benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+.care-how-benefit-card {
+  padding: 32px;
+  border-radius: 24px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.care-how-benefit-icon {
+  display: block;
+  margin-bottom: 24px;
+  color: #0d9488;
+}
+
+.care-how-benefit-title {
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.care-how-benefit-description {
+  margin-top: 12px;
+  color: #64748b;
+  line-height: 1.625;
+}
+
+/* ========================================
+   Call to Action
+======================================== */
+
+.care-how-cta-section {
+  padding: 96px 24px;
+}
+
+.care-how-cta {
+  max-width: 896px;
+  margin: 0 auto;
+  padding: 64px 32px;
+  border-radius: 24px;
+  background-color: #0f172a;
+  color: #ffffff;
+  text-align: center;
+}
+
+.care-how-cta-icon {
+  display: block;
+  margin: 0 auto 28px;
+  color: #2dd4bf;
+}
+
+.care-how-cta-title {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.care-how-cta-description {
+  max-width: 576px;
+  margin: 20px auto 0;
+  color: #cbd5e1;
+  line-height: 1.625;
+}
+
+.care-how-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 36px;
+  padding: 16px 28px;
+  border-radius: 12px;
+  background-color: #14b8a6;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.care-how-cta-button:hover {
+  background-color: #0d9488;
+}
+
+/* ========================================
+   Disclaimer
+======================================== */
+
+.care-how-disclaimer {
+  padding: 24px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.care-how-disclaimer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 1024px;
+  margin: 0 auto;
+  color: #94a3b8;
+  font-size: 12px;
+  text-align: center;
+}
+
+.care-how-disclaimer-content svg {
+  flex-shrink: 0;
+}
+
+/* ========================================
+   Responsive Design
+======================================== */
+
+@media (min-width: 640px) {
+  .care-how-hero {
+    padding-top: 112px;
+    padding-bottom: 112px;
+  }
+
+  .care-how-hero-title {
+    font-size: 48px;
+  }
+
+  .care-how-section-title,
+  .care-how-cta-title {
+    font-size: 36px;
+  }
+
+  .care-how-step-details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .care-how-cta {
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+}
+
+@media (min-width: 768px) {
+  .care-how-step-card {
+    grid-template-columns: 100px minmax(0, 1fr);
+    padding: 40px;
+  }
+
+  .care-how-step-visual {
+    flex-direction: column;
+  }
+
+  .care-how-benefits-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .care-how-hero-title {
+    font-size: 60px;
+  }
+}
+
+/* ========================================
+   Accessibility
+======================================== */
+
+.care-how-page a:focus-visible {
+  outline: 3px solid #0d9488;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .care-how-primary-button,
+  .care-how-step-card,
+  .care-how-cta-button {
+    transition: none;
+  }
+}
