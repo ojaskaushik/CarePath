@@ -5,6 +5,7 @@ import ComingSoon from "./pages/ComingSoon";
 import Chat from "./pages/Chat";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Pharmacies from "./pages/Pharmacies";
 
 export default function App() {
   return (
@@ -28,12 +29,7 @@ export default function App() {
 
         <Route
           path="/pharmacies"
-          element={
-            <ComingSoon
-              title="Find Pharmacies"
-              description="Our Canadian pharmacy discovery experience is coming soon."
-            />
-          }
+          element={<Pharmacies />}
         />
 
         <Route path="/login" element={<Login />} />
