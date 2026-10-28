@@ -1,0 +1,270 @@
+
+/* ========================================
+   CarePath - Authentication Pages
+======================================== */
+
+/* Page Layout */
+
+.care-auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  padding: 64px 20px;
+  background-color: #f8fbfa;
+}
+
+.care-auth-container {
+  width: 100%;
+  max-width: 448px;
+}
+
+/* Header */
+
+.care-auth-header {
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+.care-auth-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  border-radius: 16px;
+  background-color: #f0fdfa;
+  color: #0d9488;
+}
+
+.care-auth-title {
+  color: #0f172a;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.care-auth-subtitle {
+  margin-top: 12px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Authentication Card */
+
+.care-auth-card {
+  padding: 32px;
+  border: 1px solid #f1f5f9;
+  border-radius: 24px;
+  background-color: #ffffff;
+  box-shadow: 0 20px 25px -5px rgba(19, 78, 74, 0.05);
+}
+
+.care-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Form Fields */
+
+.care-auth-field {
+  width: 100%;
+}
+
+.care-auth-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.care-auth-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.care-auth-label-row .care-auth-label {
+  margin-bottom: 0;
+}
+
+.care-auth-hint {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Input Fields */
+
+.care-auth-input-wrapper {
+  position: relative;
+}
+
+.care-auth-input-icon {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.care-auth-input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.care-auth-input:focus {
+  border-color: #14b8a6;
+  box-shadow: 0 0 0 2px #ccfbf1;
+}
+
+.care-auth-input::placeholder {
+  color: #94a3b8;
+}
+
+.care-auth-password-input {
+  padding-right: 48px;
+}
+
+/* Password Visibility */
+
+.care-auth-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.care-auth-password-toggle:hover {
+  color: #0d9488;
+}
+
+/* Submit Button */
+
+.care-auth-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 12px;
+  background-color: #0d9488;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.care-auth-submit:hover:not(:disabled) {
+  background-color: #0f766e;
+}
+
+.care-auth-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Coming Soon Message */
+
+.care-auth-coming-soon {
+  color: #94a3b8;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Card Footer */
+
+.care-auth-card-footer {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid #f1f5f9;
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Links */
+
+.care-auth-link {
+  color: #0d9488;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.care-auth-link:hover {
+  color: #0f766e;
+}
+
+/* Bottom Section */
+
+.care-auth-bottom {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.care-auth-privacy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Accessibility */
+
+.care-auth-page a:focus-visible,
+.care-auth-page button:focus-visible {
+  outline: 3px solid #0d9488;
+  outline-offset: 3px;
+}
+
+/* Responsive Layout */
+
+@media (max-width: 480px) {
+  .care-auth-card {
+    padding: 24px;
+  }
+
+  .care-auth-label-row {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .care-auth-input,
+  .care-auth-submit,
+  .care-auth-link {
+    transition: none;
+  }
+}
