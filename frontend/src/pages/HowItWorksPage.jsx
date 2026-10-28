@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 import {
   ArrowRight,
   BookOpen,
@@ -9,6 +10,8 @@ import {
   ShieldCheck,
   UserRound,
 } from "lucide-react";
+
+import "../styles/how-it-works.css";
 
 const steps = [
   {
@@ -61,100 +64,116 @@ const steps = [
   },
 ];
 
+const benefits = [
+  {
+    icon: UserRound,
+    title: "Guest-First Access",
+    description:
+      "Explore the demonstration chat without creating an account. Saving conversations will require signing in when accounts become available.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Privacy-Conscious Design",
+    description:
+      "Guest conversations aren't saved to an account. We're developing additional privacy controls before introducing persistent chat history.",
+  },
+  {
+    icon: BookOpen,
+    title: "Educational Focus",
+    description:
+      "CarePath is intended to provide general health education, not replace qualified medical advice, diagnosis, or emergency services.",
+  },
+];
+
 export default function HowItWorksPage() {
   return (
-    <main className="bg-white">
-      <section className="relative overflow-hidden bg-[#f8fbfa] px-6 py-24 sm:py-28">
-        <div className="pointer-events-none absolute -right-20 -top-32 h-96 w-96 rounded-full bg-teal-100/60 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 -left-20 h-96 w-96 rounded-full bg-emerald-100/60 blur-3xl" />
+    <main className="care-how-page">
+      <section className="care-how-hero">
+        <div className="care-how-glow care-how-glow-right" />
+        <div className="care-how-glow care-how-glow-left" />
 
-        <div className="relative mx-auto max-w-4xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-teal-100 bg-white px-5 py-2 text-sm font-semibold text-teal-700">
+        <div className="care-how-hero-container">
+          <span className="care-how-badge">
             <HeartPulse size={17} />
             Getting Started
           </span>
 
-          <h1 className="mt-8 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+          <h1 className="care-how-hero-title">
             Your Health Journey,
-            <span className="mt-2 block text-teal-600">
-              Made Simpler.
-            </span>
+            <span>Made Simpler.</span>
           </h1>
 
-          <p className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-slate-500">
+          <p className="care-how-hero-description">
             CarePath is designed to make health information easier
             to explore, helping you understand your options and
             discover useful resources along the way.
           </p>
 
-          <Link
-            to="/chat"
-            className="mt-9 inline-flex items-center gap-2 rounded-xl bg-teal-600 px-7 py-4 font-semibold text-white transition hover:bg-teal-700"
-          >
+          <Link to="/chat" className="care-how-primary-button">
             Try Guest Chat
             <ArrowRight size={19} />
           </Link>
 
-          <p className="mt-4 text-xs text-slate-400">
+          <p className="care-how-demo-note">
             Chat currently operates in demonstration mode.
           </p>
         </div>
       </section>
 
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-16 text-center">
-            <span className="text-sm font-bold uppercase tracking-widest text-teal-600">
+      <section className="care-how-process">
+        <div className="care-how-container">
+          <div className="care-how-section-header">
+            <span className="care-how-eyebrow">
               The CarePath Experience
             </span>
 
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            <h2 className="care-how-section-title">
               Four Steps Toward Better Understanding
             </h2>
 
-            <p className="mx-auto mt-5 max-w-2xl text-slate-500">
+            <p className="care-how-section-description">
               Here's how CarePath is being designed to support
               your health-information journey.
             </p>
           </div>
 
-          <div className="space-y-8">
+          <div className="care-how-steps">
             {steps.map((step) => {
               const Icon = step.icon;
 
               return (
                 <article
                   key={step.number}
-                  className="grid gap-8 rounded-3xl border border-slate-100 bg-white p-8 shadow-sm transition hover:shadow-lg md:grid-cols-[100px_1fr] md:p-10"
+                  className="care-how-step-card"
                 >
-                  <div className="flex items-start gap-4 md:flex-col">
-                    <span className="text-4xl font-extrabold text-teal-100">
+                  <div className="care-how-step-visual">
+                    <span className="care-how-step-number">
                       {step.number}
                     </span>
 
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 text-teal-600">
+                    <div className="care-how-step-icon">
                       <Icon size={27} strokeWidth={1.8} />
                     </div>
                   </div>
 
-                  <div>
-                    <h3 className="text-2xl font-bold text-slate-900">
+                  <div className="care-how-step-content">
+                    <h3 className="care-how-step-title">
                       {step.title}
                     </h3>
 
-                    <p className="mt-4 max-w-3xl leading-relaxed text-slate-500">
+                    <p className="care-how-step-description">
                       {step.description}
                     </p>
 
-                    <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                    <div className="care-how-step-details">
                       {step.details.map((detail) => (
                         <div
                           key={detail}
-                          className="flex items-start gap-3 text-sm text-slate-600"
+                          className="care-how-step-detail"
                         >
                           <CheckCircle2
                             size={18}
-                            className="mt-0.5 shrink-0 text-teal-500"
+                            className="care-how-check-icon"
                           />
                           <span>{detail}</span>
                         </div>
@@ -168,88 +187,73 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="bg-[#f8fbfa] px-6 py-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl">
+      <section className="care-how-benefits">
+        <div className="care-how-container">
+          <div className="care-how-benefits-header">
+            <h2 className="care-how-section-title">
               Built Around You
             </h2>
 
-            <p className="mx-auto mt-4 max-w-2xl text-slate-500">
+            <p className="care-how-section-description">
               Simple access, clear information, and a
               privacy-conscious experience.
             </p>
           </div>
 
-          <div className="grid gap-7 md:grid-cols-3">
-            <div className="rounded-3xl bg-white p-8 shadow-sm">
-              <UserRound size={30} className="mb-6 text-teal-600" />
-              <h3 className="text-xl font-bold text-slate-900">
-                Guest-First Access
-              </h3>
-              <p className="mt-3 leading-relaxed text-slate-500">
-                Explore the demonstration chat without creating
-                an account. Saving conversations will require
-                signing in when accounts become available.
-              </p>
-            </div>
+          <div className="care-how-benefits-grid">
+            {benefits.map((benefit) => {
+              const Icon = benefit.icon;
 
-            <div className="rounded-3xl bg-white p-8 shadow-sm">
-              <ShieldCheck size={30} className="mb-6 text-teal-600" />
-              <h3 className="text-xl font-bold text-slate-900">
-                Privacy-Conscious Design
-              </h3>
-              <p className="mt-3 leading-relaxed text-slate-500">
-                Guest conversations aren't saved to an account.
-                We're developing additional privacy controls
-                before introducing persistent chat history.
-              </p>
-            </div>
+              return (
+                <article
+                  key={benefit.title}
+                  className="care-how-benefit-card"
+                >
+                  <Icon
+                    size={30}
+                    className="care-how-benefit-icon"
+                  />
 
-            <div className="rounded-3xl bg-white p-8 shadow-sm">
-              <BookOpen size={30} className="mb-6 text-teal-600" />
-              <h3 className="text-xl font-bold text-slate-900">
-                Educational Focus
-              </h3>
-              <p className="mt-3 leading-relaxed text-slate-500">
-                CarePath is intended to provide general health
-                education, not replace qualified medical advice,
-                diagnosis, or emergency services.
-              </p>
-            </div>
+                  <h3 className="care-how-benefit-title">
+                    {benefit.title}
+                  </h3>
+
+                  <p className="care-how-benefit-description">
+                    {benefit.description}
+                  </p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-4xl rounded-3xl bg-slate-900 px-8 py-16 text-center text-white sm:px-14">
+      <section className="care-how-cta-section">
+        <div className="care-how-cta">
           <HeartPulse
             size={40}
-            className="mx-auto mb-7 text-teal-400"
+            className="care-how-cta-icon"
           />
 
-          <h2 className="text-3xl font-bold sm:text-4xl">
+          <h2 className="care-how-cta-title">
             Ready to Explore CarePath?
           </h2>
 
-          <p className="mx-auto mt-5 max-w-xl leading-relaxed text-slate-300">
+          <p className="care-how-cta-description">
             Experience our guest conversation interface
             and discover what we're building.
           </p>
 
-          <Link
-            to="/chat"
-            className="mt-9 inline-flex items-center gap-2 rounded-xl bg-teal-500 px-7 py-4 font-semibold text-white transition hover:bg-teal-600"
-          >
+          <Link to="/chat" className="care-how-cta-button">
             Get Started
             <ArrowRight size={19} />
           </Link>
         </div>
       </section>
 
-      <div className="border-t border-slate-100 px-6 py-6">
-        <p className="mx-auto flex max-w-5xl items-center justify-center gap-2 text-center text-xs text-slate-400">
-          <ShieldCheck size={15} className="shrink-0" />
+      <div className="care-how-disclaimer">
+        <p className="care-how-disclaimer-content">
+          <ShieldCheck size={15} />
           CarePath provides educational information only and
           does not replace professional medical care.
         </p>
