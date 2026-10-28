@@ -306,3 +306,141 @@
     transition: none;
   }
 }
+
+
+/* ========================================
+   Homepage Feature Cards
+======================================== */
+
+.care-feature-card {
+  position: relative;
+  padding: 32px;
+  border: 1px solid #f1f5f9;
+  border-radius: 24px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.care-feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(19, 78, 74, 0.05);
+}
+
+/* Feature Icons */
+
+.care-feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 28px;
+  border-radius: 16px;
+}
+
+.care-feature-teal {
+  background-color: #f0fdfa;
+}
+
+.care-feature-blue {
+  background-color: #eff6ff;
+}
+
+.care-feature-emerald {
+  background-color: #ecfdf5;
+}
+
+.care-feature-purple {
+  background-color: #faf5ff;
+}
+
+.care-feature-orange {
+  background-color: #fff7ed;
+}
+
+.care-feature-rose {
+  background-color: #fff1f2;
+}
+
+.care-icon-teal {
+  color: #0d9488;
+}
+
+.care-icon-blue {
+  color: #2563eb;
+}
+
+.care-icon-emerald {
+  color: #059669;
+}
+
+.care-icon-purple {
+  color: #9333ea;
+}
+
+.care-icon-orange {
+  color: #ea580c;
+}
+
+.care-icon-rose {
+  color: #e11d48;
+}
+
+/* Card Content */
+
+.care-feature-title {
+  margin-bottom: 12px;
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.care-feature-description {
+  color: #64748b;
+  line-height: 1.625;
+}
+
+/* Explore More */
+
+.care-feature-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  color: #0d9488;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.care-feature-action svg {
+  transition: transform 0.3s ease;
+}
+
+.care-feature-card:hover .care-feature-action svg {
+  transform: translate(4px, -4px);
+}
+
+/* Mobile Layout */
+
+@media (max-width: 640px) {
+  .care-feature-card {
+    padding: 24px;
+  }
+}
+
+/* Reduced Motion */
+
+@media (prefers-reduced-motion: reduce) {
+  .care-feature-card,
+  .care-feature-action svg {
+    transition: none;
+  }
+
+  .care-feature-card:hover,
+  .care-feature-card:hover .care-feature-action svg {
+    transform: none;
+  }
+}
