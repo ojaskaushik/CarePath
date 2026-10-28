@@ -11,6 +11,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import "../styles/chat.css";
+
 const STORAGE_KEY = "carepath-guest-chat";
 
 const developmentResponse =
@@ -58,14 +60,12 @@ export default function Chat() {
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    // Remove guest chat data saved by the previous version.
     try {
       sessionStorage.removeItem(STORAGE_KEY);
     } catch {
       // Continue if browser storage is unavailable.
     }
 
-    // Clear the homepage question from navigation history.
     if (initialQuestion) {
       window.history.replaceState(
         { ...window.history.state, usr: null },
@@ -125,48 +125,42 @@ export default function Chat() {
   };
 
   return (
-    <main className="min-h-[calc(100vh-80px)] bg-[#f8fbfa]">
-      <div className="mx-auto flex max-w-6xl flex-col px-4 py-8 sm:px-6">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-teal-600"
-          >
+    <main className="care-chat-page">
+      <div className="care-chat-container">
+        <div className="care-chat-toolbar">
+          <Link to="/" className="care-chat-back">
             <ArrowLeft size={17} />
             Back to Home
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="care-chat-actions">
             <button
               type="button"
               onClick={newChat}
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-teal-300"
+              className="care-chat-new"
             >
               <Plus size={17} />
               New Chat
             </button>
 
-            <Link
-              to="/signup"
-              className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-700"
-            >
+            <Link to="/signup" className="care-chat-save">
               <Save size={17} />
               Save Chat
             </Link>
           </div>
         </div>
 
-        <div className="flex min-h-[650px] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-teal-900/5">
-          <div className="flex items-center gap-4 border-b border-slate-100 px-6 py-5">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-teal-600">
+        <div className="care-chat-panel">
+          <div className="care-chat-header">
+            <div className="care-chat-header-icon">
               <HeartPulse size={25} />
             </div>
 
             <div>
-              <h1 className="text-lg font-bold text-slate-900">
+              <h1 className="care-chat-heading">
                 CarePath Assistant
               </h1>
-              <p className="text-xs text-slate-500">
+              <p className="care-chat-session">
                 Guest session · Not saved
               </p>
             </div>
@@ -174,28 +168,28 @@ export default function Chat() {
 
           <div
             aria-live="polite"
-            className="flex flex-1 flex-col gap-6 px-5 py-8 sm:px-10"
+            className="care-chat-messages"
           >
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex gap-3 ${
+                className={`care-chat-message-row ${
                   message.role === "user"
-                    ? "justify-end"
-                    : "justify-start"
+                    ? "care-chat-message-user"
+                    : "care-chat-message-assistant"
                 }`}
               >
                 {message.role === "assistant" && (
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-600">
+                  <div className="care-chat-avatar">
                     <MessageCircle size={19} />
                   </div>
                 )}
 
                 <div
-                  className={`max-w-[85%] whitespace-pre-wrap break-words rounded-2xl px-5 py-4 text-sm leading-relaxed sm:max-w-[75%] ${
+                  className={`care-chat-bubble ${
                     message.role === "user"
-                      ? "rounded-tr-sm bg-teal-600 text-white"
-                      : "rounded-tl-sm bg-slate-100 text-slate-700"
+                      ? "care-chat-bubble-user"
+                      : "care-chat-bubble-assistant"
                   }`}
                 >
                   {message.content}
@@ -204,37 +198,42 @@ export default function Chat() {
             ))}
           </div>
 
-          <div className="border-t border-slate-100 bg-white p-5 sm:p-7">
+          <div className="care-chat-composer">
             <form
               onSubmit={sendMessage}
-              className="flex items-end gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3 focus-within:border-teal-400"
+              className="care-chat-form"
             >
-              <label htmlFor="chat-input" className="sr-only">
+              <label
+                htmlFor="chat-input"
+                className="care-chat-sr-only"
+              >
                 Describe your health concern
               </label>
 
               <textarea
                 id="chat-input"
                 value={input}
-                onChange={(event) => setInput(event.target.value)}
+                onChange={(event) =>
+                  setInput(event.target.value)
+                }
                 onKeyDown={handleKeyDown}
                 placeholder="Describe how you're feeling..."
                 rows={2}
                 maxLength={2000}
-                className="max-h-40 min-h-12 flex-1 resize-none bg-transparent px-2 py-2 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                className="care-chat-input"
               />
 
               <button
                 type="submit"
                 disabled={!input.trim()}
                 aria-label="Send message"
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-40"
+                className="care-chat-send"
               >
                 <ArrowUp size={20} />
               </button>
             </form>
 
-            <p className="mt-4 flex items-center justify-center gap-2 text-center text-xs text-slate-400">
+            <p className="care-chat-disclaimer">
               <ShieldCheck size={14} />
               Educational information only. Not medical advice.
             </p>
