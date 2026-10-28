@@ -444,3 +444,98 @@
     transform: none;
   }
 }
+
+
+
+/* ========================================
+   Homepage Features Section
+======================================== */
+
+.care-features {
+  padding: 96px 24px;
+  background-color: #ffffff;
+}
+
+.care-features-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.care-features-header {
+  margin-bottom: 56px;
+  text-align: center;
+}
+
+/* Section Badge */
+
+.care-features-badge {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background-color: #f0fdfa;
+  color: #0f766e;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Heading */
+
+.care-features-title {
+  color: #0f172a;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.care-features-title span {
+  display: block;
+  color: #0d9488;
+}
+
+/* Description */
+
+.care-features-description {
+  max-width: 672px;
+  margin: 20px auto 0;
+  color: #64748b;
+  font-size: 18px;
+  line-height: 1.625;
+}
+
+/* Feature Grid */
+
+.care-features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+/* Responsive Layout */
+
+@media (min-width: 640px) {
+  .care-features-title {
+    font-size: 48px;
+  }
+}
+
+@media (min-width: 768px) {
+  .care-features-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .care-features {
+    padding: 72px 24px;
+  }
+
+  .care-features-header {
+    margin-bottom: 40px;
+  }
+
+  .care-features-description {
+    font-size: 16px;
+  }
+}
