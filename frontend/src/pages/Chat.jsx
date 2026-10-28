@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
   ArrowLeft,
@@ -11,12 +11,10 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import { sendChatMessage } from "../services/chatApi";
 import "../styles/chat.css";
 
 const STORAGE_KEY = "carepath-guest-chat";
-
-const developmentResponse =
-  "Thanks for sharing your question. CarePath's personalized health guidance is still under development. This is currently a demonstration conversation, not a medical assessment. If your symptoms are severe, worsening, or concerning, contact a healthcare professional. For a medical emergency in Canada, call 911.";
 
 const welcomeMessage = {
   id: "welcome",
@@ -37,16 +35,12 @@ function getInitialMessages(initialQuestion) {
       role: "user",
       content: initialQuestion,
     },
-    {
-      id: crypto.randomUUID(),
-      role: "assistant",
-      content: developmentResponse,
-    },
   ];
 }
 
 export default function Chat() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const initialQuestion =
     typeof location.state?.initialQuestion === "string"
@@ -58,6 +52,11 @@ export default function Chat() {
   );
 
   const [input, setInput] = useState("");
+  const [isSending, setIsSending] = useState(Boolean(initialQuestion));
+  const [error, setError] = useState("");
+
+  const requestVersion = useRef(0);
+  const initialRequestStarted = useRef(false);
 
   useEffect(() => {
     try {
@@ -67,20 +66,66 @@ export default function Chat() {
     }
 
     if (initialQuestion) {
-      window.history.replaceState(
-        { ...window.history.state, usr: null },
-        "",
-        window.location.pathname
-      );
+      navigate(location.pathname, {
+        replace: true,
+        state: null,
+      });
     }
+  }, [initialQuestion, navigate, location.pathname]);
+
+  useEffect(() => {
+    if (!initialQuestion || initialRequestStarted.current) {
+      return;
+    }
+
+    initialRequestStarted.current = true;
+
+    const version = requestVersion.current;
+
+    async function loadInitialResponse() {
+      try {
+        const reply = await sendChatMessage(initialQuestion);
+
+        if (version !== requestVersion.current) {
+          return;
+        }
+
+        setMessages((previous) => [
+          ...previous,
+          {
+            id: crypto.randomUUID(),
+            role: "assistant",
+            content: reply,
+          },
+        ]);
+      } catch {
+        if (version === requestVersion.current) {
+          setError(
+            "CarePath couldn't connect to the server. Please try again."
+          );
+        }
+      } finally {
+        if (version === requestVersion.current) {
+          setIsSending(false);
+        }
+      }
+    }
+
+    loadInitialResponse();
   }, [initialQuestion]);
 
-  const sendMessage = (event) => {
+  const sendMessage = async (event) => {
     event.preventDefault();
 
     const question = input.trim();
 
-    if (!question) return;
+    if (!question || isSending) return;
+
+    const version = requestVersion.current;
+
+    setInput("");
+    setError("");
+    setIsSending(true);
 
     setMessages((previous) => [
       ...previous,
@@ -89,14 +134,34 @@ export default function Chat() {
         role: "user",
         content: question,
       },
-      {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: developmentResponse,
-      },
     ]);
 
-    setInput("");
+    try {
+      const reply = await sendChatMessage(question);
+
+      if (version !== requestVersion.current) {
+        return;
+      }
+
+      setMessages((previous) => [
+        ...previous,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: reply,
+        },
+      ]);
+    } catch {
+      if (version === requestVersion.current) {
+        setError(
+          "CarePath couldn't connect to the server. Please try again."
+        );
+      }
+    } finally {
+      if (version === requestVersion.current) {
+        setIsSending(false);
+      }
+    }
   };
 
   const handleKeyDown = (event) => {
@@ -107,21 +172,24 @@ export default function Chat() {
     ) {
       event.preventDefault();
 
-      if (input.trim()) {
+      if (input.trim() && !isSending) {
         event.currentTarget.form?.requestSubmit();
       }
     }
   };
 
   const newChat = () => {
+    requestVersion.current += 1;
+
     setMessages([welcomeMessage]);
     setInput("");
+    setError("");
+    setIsSending(false);
 
-    window.history.replaceState(
-      { ...window.history.state, usr: null },
-      "",
-      window.location.pathname
-    );
+    navigate(location.pathname, {
+      replace: true,
+      state: null,
+    });
   };
 
   return (
@@ -225,13 +293,25 @@ export default function Chat() {
 
               <button
                 type="submit"
-                disabled={!input.trim()}
+                disabled={!input.trim() || isSending}
                 aria-label="Send message"
                 className="care-chat-send"
               >
                 <ArrowUp size={20} />
               </button>
             </form>
+
+            {isSending && (
+              <p role="status" className="chat-status">
+                CarePath is responding...
+              </p>
+            )}
+
+            {error && (
+              <p role="alert" className="chat-error">
+                {error}
+              </p>
+            )}
 
             <p className="care-chat-disclaimer">
               <ShieldCheck size={14} />
