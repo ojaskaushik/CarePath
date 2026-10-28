@@ -1,0 +1,469 @@
+
+/* ========================================
+   CarePath - Pharmacy Search
+======================================== */
+
+.care-pharmacy-search {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.care-pharmacy-search-form {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  background-color: #ffffff;
+  box-shadow: 0 20px 25px -5px rgba(19, 78, 74, 0.05);
+}
+
+.care-pharmacy-search-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.care-pharmacy-input-wrapper {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 0 12px;
+}
+
+.care-pharmacy-location-icon {
+  flex-shrink: 0;
+  color: #0d9488;
+}
+
+.care-pharmacy-input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 0;
+  border: none;
+  background: transparent;
+  color: #1e293b;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.care-pharmacy-input::placeholder {
+  color: #94a3b8;
+}
+
+.care-pharmacy-search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 28px;
+  border: none;
+  border-radius: 16px;
+  background-color: #0d9488;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.care-pharmacy-search-button:hover {
+  background-color: #0f766e;
+}
+
+.care-pharmacy-error {
+  margin-top: 12px;
+  color: #dc2626;
+  font-size: 14px;
+}
+
+.care-pharmacy-search-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+}
+
+.care-pharmacy-search-note svg {
+  flex-shrink: 0;
+  color: #0d9488;
+}
+
+.care-pharmacy-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ========================================
+   Pharmacies Page - Hero
+======================================== */
+
+.care-pharmacies-page {
+  min-height: 100vh;
+  background-color: #f8fbfa;
+}
+
+.care-pharmacies-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 96px 24px 80px;
+}
+
+.care-pharmacies-glow {
+  position: absolute;
+  width: 384px;
+  height: 384px;
+  border-radius: 50%;
+  filter: blur(64px);
+  pointer-events: none;
+}
+
+.care-pharmacies-glow-right {
+  top: -112px;
+  right: -96px;
+  background-color: rgba(204, 251, 241, 0.5);
+}
+
+.care-pharmacies-glow-left {
+  bottom: -160px;
+  left: -96px;
+  background-color: rgba(209, 250, 229, 0.6);
+}
+
+.care-pharmacies-hero-container {
+  position: relative;
+  max-width: 1024px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.care-pharmacies-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  padding: 8px 20px;
+  border: 1px solid #ccfbf1;
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #0f766e;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.care-pharmacies-title {
+  color: #0f172a;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.care-pharmacies-title span {
+  display: block;
+  margin-top: 8px;
+  color: #0d9488;
+}
+
+.care-pharmacies-intro {
+  max-width: 672px;
+  margin: 24px auto 48px;
+  color: #64748b;
+  font-size: 18px;
+  line-height: 1.625;
+}
+
+/* ========================================
+   Pharmacy Search Preview
+======================================== */
+
+.care-pharmacies-search-result {
+  max-width: 768px;
+  margin: 32px auto 0;
+  padding: 28px;
+  border: 1px solid #ccfbf1;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.care-pharmacies-result-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.care-pharmacies-result-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #f0fdfa;
+  color: #0d9488;
+}
+
+.care-pharmacies-result-title {
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.care-pharmacies-result-description {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.625;
+}
+
+/* ========================================
+   Pharmacy Benefits
+======================================== */
+
+.care-pharmacies-benefits {
+  padding: 80px 24px;
+  background-color: #ffffff;
+}
+
+.care-pharmacies-benefits-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.care-pharmacies-benefits-header {
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.care-pharmacies-benefits-title {
+  color: #0f172a;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.care-pharmacies-benefits-title span {
+  color: #0d9488;
+}
+
+.care-pharmacies-benefits-description {
+  max-width: 672px;
+  margin: 16px auto 0;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.care-pharmacies-benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+.care-pharmacies-benefit-card {
+  padding: 32px;
+  border: 1px solid #f1f5f9;
+  border-radius: 24px;
+  background-color: #f8fbfa;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.care-pharmacies-benefit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.care-pharmacies-benefit-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 24px;
+  border-radius: 16px;
+  background-color: #f0fdfa;
+  color: #0d9488;
+}
+
+.care-pharmacies-benefit-title {
+  margin-bottom: 12px;
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.care-pharmacies-benefit-description {
+  color: #64748b;
+  line-height: 1.625;
+}
+
+/* ========================================
+   Call to Action
+======================================== */
+
+.care-pharmacies-cta-section {
+  padding: 80px 24px;
+}
+
+.care-pharmacies-cta {
+  max-width: 896px;
+  margin: 0 auto;
+  padding: 56px 32px;
+  border-radius: 24px;
+  background-color: #0f172a;
+  color: #ffffff;
+  text-align: center;
+}
+
+.care-pharmacies-cta-icon {
+  display: block;
+  margin: 0 auto 24px;
+  color: #2dd4bf;
+}
+
+.care-pharmacies-cta-title {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.care-pharmacies-cta-description {
+  max-width: 576px;
+  margin: 20px auto 0;
+  color: #cbd5e1;
+  line-height: 1.625;
+}
+
+.care-pharmacies-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+  padding: 16px 28px;
+  border-radius: 12px;
+  background-color: #14b8a6;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.care-pharmacies-cta-button:hover {
+  background-color: #0d9488;
+}
+
+.care-pharmacies-cta-disclaimer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* ========================================
+   Accessibility
+======================================== */
+
+.care-pharmacy-search-button:focus-visible,
+.care-pharmacy-input:focus-visible,
+.care-pharmacies-page a:focus-visible {
+  outline: 3px solid #0d9488;
+  outline-offset: 3px;
+}
+
+/* ========================================
+   Responsive Design
+======================================== */
+
+@media (min-width: 640px) {
+  .care-pharmacy-search-form {
+    padding: 16px;
+  }
+
+  .care-pharmacy-search-row {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .care-pharmacy-input {
+    font-size: 16px;
+  }
+
+  .care-pharmacies-title {
+    font-size: 48px;
+  }
+
+  .care-pharmacies-benefits-title,
+  .care-pharmacies-cta-title {
+    font-size: 36px;
+  }
+
+  .care-pharmacies-cta {
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+}
+
+@media (min-width: 768px) {
+  .care-pharmacies-benefits-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .care-pharmacies-title {
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 639px) {
+  .care-pharmacies-hero {
+    padding-top: 72px;
+    padding-bottom: 64px;
+  }
+
+  .care-pharmacies-benefits,
+  .care-pharmacies-cta-section {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .care-pharmacies-search-result {
+    padding: 20px;
+  }
+
+  .care-pharmacies-cta {
+    padding: 40px 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .care-pharmacy-search-button,
+  .care-pharmacies-benefit-card,
+  .care-pharmacies-cta-button {
+    transition: none;
+  }
+
+  .care-pharmacies-benefit-card:hover {
+    transform: none;
+  }
+}
