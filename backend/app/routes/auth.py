@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -17,6 +17,9 @@ from app.security.password import hash_password, verify_password
 from app.security.tokens import create_access_token
 
 router = APIRouter(prefix="/api/v1/auth", tags=["Authentication"])
+
+COOKIE_NAME = "carepath_session"
+COOKIE_MAX_AGE = 30 * 60
 
 
 @router.post(
@@ -71,6 +74,7 @@ def signup(
 @router.post("/login", response_model=TokenResponse)
 def login(
     data: LoginRequest,
+    response: Response,
     db: Session = Depends(get_db),
 ):
     email = str(data.email).lower()
@@ -95,11 +99,32 @@ def login(
 
     access_token = create_access_token(user.id)
 
+    response.set_cookie(
+        key=COOKIE_NAME,
+        value=access_token,
+        max_age=COOKIE_MAX_AGE,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        path="/",
+    )
+
     return TokenResponse(
         access_token=access_token,
         token_type="bearer",
         user=UserResponse.model_validate(user),
     )
+
+
+@router.post("/logout")
+def logout(response: Response):
+    response.delete_cookie(
+        key=COOKIE_NAME,
+        path="/",
+        samesite="lax",
+    )
+
+    return {"message": "Signed out successfully"}
 
 
 @router.get("/me", response_model=UserResponse)
