@@ -6,6 +6,9 @@ from sqlalchemy import engine_from_config, pool
 from app.database.config import Base, DATABASE_URL
 from app.models.user import User  # noqa: F401
 
+from app.models.conversation import Conversation  # noqa: F401
+from app.models.message import Message  # noqa: F401
+
 config = context.config
 
 if config.config_file_name is not None:
