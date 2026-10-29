@@ -5,8 +5,14 @@ from sqlalchemy.orm import Session
 
 from app.database.session import get_db
 from app.models.user import User
-from app.schemas.auth import LoginRequest, SignupRequest, UserResponse
+from app.schemas.auth import (
+    LoginRequest,
+    SignupRequest,
+    TokenResponse,
+    UserResponse,
+)
 from app.security.password import hash_password, verify_password
+from app.security.tokens import create_access_token
 
 router = APIRouter(prefix="/api/v1/auth", tags=["Authentication"])
 
@@ -60,7 +66,7 @@ def signup(
     return new_user
 
 
-@router.post("/login", response_model=UserResponse)
+@router.post("/login", response_model=TokenResponse)
 def login(
     data: LoginRequest,
     db: Session = Depends(get_db),
@@ -85,4 +91,10 @@ def login(
             detail="This account is disabled",
         )
 
-    return user
+    access_token = create_access_token(user.id)
+
+    return TokenResponse(
+        access_token=access_token,
+        token_type="bearer",
+        user=UserResponse.model_validate(user),
+    )
