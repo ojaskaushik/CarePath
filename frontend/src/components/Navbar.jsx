@@ -3,8 +3,8 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { HeartPulse, LogOut, Menu, UserRound, X } from "lucide-react";
 
 import {
-  clearAuthSession,
   getCurrentUser,
+  signOut,
   subscribeToAuth,
 } from "../services/authSession";
 
@@ -24,8 +24,14 @@ export default function Navbar() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  function handleSignOut() {
-    clearAuthSession();
+  async function handleSignOut() {
+    const success = await signOut();
+
+    if (!success) {
+      window.alert("Unable to sign out. Please try again.");
+      return;
+    }
+
     closeMenu();
     navigate("/");
   }
