@@ -66,7 +66,7 @@ export default function Login() {
 
       setAuthSession(data.access_token, data.user);
 
-      navigate("/chat", {
+      navigate("/profile", {
         replace: true,
       });
     } catch (err) {
@@ -210,7 +210,7 @@ export default function Login() {
         </div>
 
         <div className="care-auth-bottom">
-          <Link to="/chat" className="care-auth-link">
+          <Link to="/profile" className="care-auth-link">
             Continue without an account
           </Link>
 
