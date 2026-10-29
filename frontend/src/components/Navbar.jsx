@@ -1,6 +1,13 @@
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { HeartPulse, Menu, X } from "lucide-react";
+import { useSyncExternalStore, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { HeartPulse, LogOut, Menu, UserRound, X } from "lucide-react";
+
+import {
+  clearAuthSession,
+  getCurrentUser,
+  subscribeToAuth,
+} from "../services/authSession";
+
 import "../styles/navbar.css";
 
 const links = [
@@ -10,9 +17,18 @@ const links = [
 ];
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const user = useSyncExternalStore(subscribeToAuth, getCurrentUser);
+
   const closeMenu = () => setMenuOpen(false);
+
+  function handleSignOut() {
+    clearAuthSession();
+    closeMenu();
+    navigate("/");
+  }
 
   return (
     <header className="care-navbar">
@@ -46,13 +62,33 @@ export default function Navbar() {
         </div>
 
         <div className="care-navbar-actions">
-          <Link to="/login" className="care-navbar-login">
-            Log In
-          </Link>
+          {user ? (
+            <>
+              <span className="care-navbar-link">
+                <UserRound size={17} />
+                {user.full_name}
+              </span>
 
-          <Link to="/signup" className="care-navbar-signup">
-            Sign Up
-          </Link>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="care-navbar-login"
+              >
+                <LogOut size={16} />
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="care-navbar-login">
+                Log In
+              </Link>
+
+              <Link to="/signup" className="care-navbar-signup">
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
 
         <button
@@ -87,21 +123,41 @@ export default function Navbar() {
             ))}
 
             <div className="care-navbar-mobile-actions">
-              <Link
-                to="/login"
-                onClick={closeMenu}
-                className="care-navbar-mobile-login"
-              >
-                Log In
-              </Link>
+              {user ? (
+                <>
+                  <span className="care-navbar-mobile-link">
+                    <UserRound size={17} />
+                    {user.full_name}
+                  </span>
 
-              <Link
-                to="/signup"
-                onClick={closeMenu}
-                className="care-navbar-mobile-signup"
-              >
-                Sign Up
-              </Link>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="care-navbar-mobile-login"
+                  >
+                    <LogOut size={16} />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={closeMenu}
+                    className="care-navbar-mobile-login"
+                  >
+                    Log In
+                  </Link>
+
+                  <Link
+                    to="/signup"
+                    onClick={closeMenu}
+                    className="care-navbar-mobile-signup"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
