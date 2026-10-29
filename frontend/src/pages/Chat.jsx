@@ -1,5 +1,15 @@
-import { useState, useEffect, useRef, useSyncExternalStore } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 
 import {
   ArrowLeft,
@@ -32,21 +42,6 @@ const welcomeMessage = {
     "Welcome to CarePath! You can describe your health concern here. Our personalized health guidance feature is currently under development.",
 };
 
-function getInitialMessages(initialQuestion) {
-  if (!initialQuestion) {
-    return [welcomeMessage];
-  }
-
-  return [
-    welcomeMessage,
-    {
-      id: crypto.randomUUID(),
-      role: "user",
-      content: initialQuestion,
-    },
-  ];
-}
-
 function displayMessages(savedMessages) {
   return [
     welcomeMessage,
@@ -59,23 +54,24 @@ function displayMessages(savedMessages) {
 }
 
 export default function Chat() {
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
 
   const user = useSyncExternalStore(
     subscribeToAuth,
     getCurrentUser
   );
 
+  const selectedConversation = searchParams.get("conversation");
+  const startNew = location.state?.newChat === true;
+
   const initialQuestion =
     typeof location.state?.initialQuestion === "string"
       ? location.state.initialQuestion.trim().slice(0, 2000)
       : "";
 
-  const [messages, setMessages] = useState(() =>
-    getInitialMessages(initialQuestion)
-  );
-
+  const [messages, setMessages] = useState([welcomeMessage]);
   const [conversationId, setConversationId] = useState(null);
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -84,29 +80,33 @@ export default function Chat() {
   const [saveStatus, setSaveStatus] = useState("");
 
   const requestVersion = useRef(0);
-  const initialRequestStarted = useRef(false);
   const conversationIdRef = useRef(null);
-
-  useEffect(() => {
-    if (initialQuestion) {
-      navigate(location.pathname, {
-        replace: true,
-        state: null,
-      });
-    }
-  }, [initialQuestion, navigate, location.pathname]);
+  const sendingRef = useRef(false);
+  const initialQuestionRef = useRef(null);
 
   useEffect(() => {
     const version = ++requestVersion.current;
 
-    async function restoreConversation() {
+    async function loadChat() {
       setError("");
       setSaveStatus("");
+      setMessages([welcomeMessage]);
       setConversationId(null);
       conversationIdRef.current = null;
-      setMessages(getInitialMessages(initialQuestion));
+      sendingRef.current = false;
+      setIsSending(false);
 
       if (!user) {
+        setIsLoading(false);
+
+        if (selectedConversation) {
+          navigate("/login", { replace: true });
+        }
+
+        return;
+      }
+
+      if (startNew || initialQuestion) {
         setIsLoading(false);
         return;
       }
@@ -114,34 +114,37 @@ export default function Chat() {
       setIsLoading(true);
 
       try {
-        const conversations = await getConversations();
+        let id = selectedConversation;
+
+        if (!id) {
+          const conversations = await getConversations();
+
+          if (version !== requestVersion.current) return;
+
+          if (conversations.length === 0) {
+            return;
+          }
+
+          id = conversations[0].id;
+        }
+
+        const conversation = await getConversation(id);
 
         if (version !== requestVersion.current) return;
 
-        if (initialQuestion) {
-          setIsLoading(false);
-          return;
+        conversationIdRef.current = conversation.id;
+        setConversationId(conversation.id);
+        setMessages(displayMessages(conversation.messages));
+
+        if (!selectedConversation) {
+          navigate(`/chat?conversation=${conversation.id}`, {
+            replace: true,
+          });
         }
-
-        if (conversations.length === 0) {
-          setMessages([welcomeMessage]);
-          setIsLoading(false);
-          return;
-        }
-
-        const latestConversation = await getConversation(
-          conversations[0].id
-        );
-
-        if (version !== requestVersion.current) return;
-
-        conversationIdRef.current = latestConversation.id;
-        setConversationId(latestConversation.id);
-        setMessages(displayMessages(latestConversation.messages));
       } catch {
         if (version === requestVersion.current) {
           setError(
-            "Unable to load your saved conversations. Please try refreshing."
+            "Unable to load this conversation. Please try again."
           );
         }
       } finally {
@@ -151,25 +154,45 @@ export default function Chat() {
       }
     }
 
-    restoreConversation();
+    loadChat();
 
     return () => {
       requestVersion.current += 1;
     };
-  }, [user, initialQuestion]);
+  }, [
+    user,
+    selectedConversation,
+    startNew,
+    initialQuestion,
+    navigate,
+  ]);
 
   useEffect(() => {
-    if (!initialQuestion || initialRequestStarted.current || isLoading) {
+    if (
+      !initialQuestion ||
+      isLoading ||
+      initialQuestionRef.current === initialQuestion
+    ) {
       return;
     }
 
-    initialRequestStarted.current = true;
+    initialQuestionRef.current = initialQuestion;
 
     async function sendInitialQuestion() {
       const version = requestVersion.current;
 
+      sendingRef.current = true;
       setIsSending(true);
       setError("");
+
+      setMessages([
+        welcomeMessage,
+        {
+          id: crypto.randomUUID(),
+          role: "user",
+          content: initialQuestion,
+        },
+      ]);
 
       try {
         if (user) {
@@ -188,6 +211,11 @@ export default function Chat() {
           if (version !== requestVersion.current) return;
 
           setMessages(displayMessages(updated.messages));
+
+          navigate(`/chat?conversation=${conversation.id}`, {
+            replace: true,
+            state: null,
+          });
         } else {
           const reply = await sendChatMessage(initialQuestion);
 
@@ -201,41 +229,50 @@ export default function Chat() {
               content: reply,
             },
           ]);
+
+          navigate("/chat", {
+            replace: true,
+            state: null,
+          });
         }
       } catch {
         if (version === requestVersion.current) {
           setError(
-            "CarePath couldn't send your message. Please try again."
+            "Unable to send your message. Please try again."
           );
+          setInput(initialQuestion);
         }
       } finally {
         if (version === requestVersion.current) {
+          sendingRef.current = false;
           setIsSending(false);
         }
       }
     }
 
     sendInitialQuestion();
-  }, [initialQuestion, isLoading, user]);
+  }, [initialQuestion, isLoading, user, navigate]);
 
   async function sendMessage(event) {
     event.preventDefault();
 
     const question = input.trim();
 
-    if (!question || isSending || isLoading) return;
+    if (!question || sendingRef.current || isLoading) return;
 
     const version = requestVersion.current;
+    const temporaryId = crypto.randomUUID();
 
+    sendingRef.current = true;
+    setIsSending(true);
     setInput("");
     setError("");
     setSaveStatus("");
-    setIsSending(true);
 
     setMessages((previous) => [
       ...previous,
       {
-        id: crypto.randomUUID(),
+        id: temporaryId,
         role: "user",
         content: question,
       },
@@ -264,6 +301,15 @@ export default function Chat() {
 
         setMessages(displayMessages(updated.messages));
         setSaveStatus("Conversation saved automatically.");
+
+        if (
+          selectedConversation !== String(activeId)
+        ) {
+          navigate(`/chat?conversation=${activeId}`, {
+            replace: true,
+            state: null,
+          });
+        }
       } else {
         const reply = await sendChatMessage(question);
 
@@ -284,19 +330,16 @@ export default function Chat() {
           "Unable to send or save your message. Please try again."
         );
         setInput(question);
+
         setMessages((previous) =>
           previous.filter(
-            (message) =>
-              !(
-                message.role === "user" &&
-                message.content === question &&
-                typeof message.id === "string"
-              )
+            (message) => message.id !== temporaryId
           )
         );
       }
     } finally {
       if (version === requestVersion.current) {
+        sendingRef.current = false;
         setIsSending(false);
       }
     }
@@ -320,6 +363,9 @@ export default function Chat() {
     requestVersion.current += 1;
 
     conversationIdRef.current = null;
+    sendingRef.current = false;
+    initialQuestionRef.current = null;
+
     setConversationId(null);
     setMessages([welcomeMessage]);
     setInput("");
@@ -328,9 +374,9 @@ export default function Chat() {
     setIsSending(false);
     setIsLoading(false);
 
-    navigate(location.pathname, {
+    navigate("/chat", {
       replace: true,
-      state: null,
+      state: { newChat: true },
     });
   }
 
@@ -340,9 +386,16 @@ export default function Chat() {
       return;
     }
 
+    if (isSending) {
+      setSaveStatus(
+        "Your message is being saved. Please wait."
+      );
+      return;
+    }
+
     if (!conversationId) {
       setSaveStatus(
-        "Start a conversation first. Your messages will save automatically."
+        "Start a conversation first. Messages save automatically."
       );
       return;
     }
@@ -364,6 +417,7 @@ export default function Chat() {
               type="button"
               onClick={newChat}
               className="care-chat-new"
+              disabled={isLoading || isSending}
             >
               <Plus size={17} />
               New Chat
@@ -435,7 +489,10 @@ export default function Chat() {
           </div>
 
           <div className="care-chat-composer">
-            <form onSubmit={sendMessage} className="care-chat-form">
+            <form
+              onSubmit={sendMessage}
+              className="care-chat-form"
+            >
               <label
                 htmlFor="chat-input"
                 className="care-chat-sr-only"
@@ -446,7 +503,9 @@ export default function Chat() {
               <textarea
                 id="chat-input"
                 value={input}
-                onChange={(event) => setInput(event.target.value)}
+                onChange={(event) =>
+                  setInput(event.target.value)
+                }
                 onKeyDown={handleKeyDown}
                 placeholder="Describe how you're feeling..."
                 rows={2}
@@ -457,7 +516,9 @@ export default function Chat() {
 
               <button
                 type="submit"
-                disabled={!input.trim() || isSending || isLoading}
+                disabled={
+                  !input.trim() || isSending || isLoading
+                }
                 aria-label="Send message"
                 className="care-chat-send"
               >
