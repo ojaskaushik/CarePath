@@ -1,4 +1,6 @@
+import { useEffect, useSyncExternalStore } from "react";
 import { Routes, Route } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import ComingSoon from "./pages/ComingSoon";
@@ -8,7 +10,32 @@ import Signup from "./pages/Signup";
 import Pharmacies from "./pages/Pharmacies";
 import HowItWorksPage from "./pages/HowItWorksPage";
 
+import {
+  isAuthLoading,
+  restoreAuthSession,
+  subscribeToAuth,
+} from "./services/authSession";
+
 export default function App() {
+  const authLoading = useSyncExternalStore(
+    subscribeToAuth,
+    isAuthLoading
+  );
+
+  useEffect(() => {
+    restoreAuthSession();
+  }, []);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-[#f8fbfa] flex items-center justify-center">
+        <p className="text-slate-600">
+          Loading CarePath...
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#f8fbfa]">
       <Navbar />
