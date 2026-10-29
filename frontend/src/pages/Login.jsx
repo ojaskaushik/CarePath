@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
   ArrowRight,
@@ -11,10 +11,73 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import { setAuthSession } from "../services/authSession";
 import "../styles/auth.css";
 
+const API_BASE_URL = "http://localhost:8000";
+
 export default function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  const signupSuccess = location.state?.signupSuccess === true;
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.trim().toLowerCase(),
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        const message =
+          typeof data.detail === "string"
+            ? data.detail
+            : "Unable to sign in. Please check your details.";
+
+        throw new Error(message);
+      }
+
+      if (!data.access_token || !data.user) {
+        throw new Error("Invalid login response from CarePath");
+      }
+
+      setAuthSession(data.access_token, data.user);
+
+      navigate("/chat", {
+        replace: true,
+      });
+    } catch (err) {
+      setError(
+        err instanceof TypeError
+          ? "Unable to connect to CarePath. Please try again later."
+          : err.message || "Something went wrong. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <main className="care-auth-page">
@@ -29,15 +92,21 @@ export default function Login() {
           </h1>
 
           <p className="care-auth-subtitle">
-            Sign in to access your saved CarePath conversations.
+            Sign in to your CarePath account.
           </p>
         </div>
 
         <div className="care-auth-card">
           <form
-            onSubmit={(event) => event.preventDefault()}
+            onSubmit={handleSubmit}
             className="care-auth-form"
           >
+            {signupSuccess && (
+              <p role="status" className="care-auth-success">
+                Account created successfully! Sign in to continue.
+              </p>
+            )}
+
             <div className="care-auth-field">
               <label
                 htmlFor="login-email"
@@ -57,7 +126,10 @@ export default function Login() {
                   type="email"
                   autoComplete="email"
                   placeholder="you@example.com"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                   required
+                  disabled={isSubmitting}
                   className="care-auth-input"
                 />
               </div>
@@ -88,7 +160,10 @@ export default function Login() {
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   placeholder="Enter your password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
                   required
+                  disabled={isSubmitting}
                   className="care-auth-input care-auth-password-input"
                 />
 
@@ -96,9 +171,7 @@ export default function Login() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={
-                    showPassword
-                      ? "Hide password"
-                      : "Show password"
+                    showPassword ? "Hide password" : "Show password"
                   }
                   className="care-auth-password-toggle"
                 >
@@ -111,36 +184,32 @@ export default function Login() {
               </div>
             </div>
 
+            {error && (
+              <p role="alert" className="care-auth-error">
+                {error}
+              </p>
+            )}
+
             <button
               type="submit"
-              disabled
+              disabled={isSubmitting}
               className="care-auth-submit"
             >
-              Sign In
+              {isSubmitting ? "Signing in..." : "Sign In"}
               <ArrowRight size={18} />
             </button>
-
-            <p className="care-auth-coming-soon">
-              Sign-in functionality is coming soon.
-            </p>
           </form>
 
           <div className="care-auth-card-footer">
             Don't have an account?{" "}
-            <Link
-              to="/signup"
-              className="care-auth-link"
-            >
+            <Link to="/signup" className="care-auth-link">
               Create an account
             </Link>
           </div>
         </div>
 
         <div className="care-auth-bottom">
-          <Link
-            to="/chat"
-            className="care-auth-link"
-          >
+          <Link to="/chat" className="care-auth-link">
             Continue without an account
           </Link>
 
