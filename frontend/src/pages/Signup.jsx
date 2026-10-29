@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   ArrowRight,
@@ -14,9 +14,91 @@ import {
 
 import "../styles/auth.css";
 
+const API_BASE_URL = "http://localhost:8000";
+
 export default function Signup() {
+  const navigate = useNavigate();
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError("");
+
+    if (fullName.trim().length < 2) {
+      setError("Please enter your full name");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("Your password must contain at least 8 characters");
+      return;
+    }
+
+    if (password.length > 128) {
+      setError("Your password must contain no more than 128 characters");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/auth/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            full_name: fullName.trim(),
+            email: email.trim().toLowerCase(),
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        const message =
+          typeof data.detail === "string"
+            ? data.detail
+            : "Unable to create your account. Please check your details.";
+
+        throw new Error(message);
+      }
+
+      navigate("/login", {
+        replace: true,
+        state: {
+          signupSuccess: true,
+        },
+      });
+    } catch (err) {
+      setError(
+        err instanceof TypeError
+          ? "Unable to connect to CarePath. Please try again later."
+          : err.message || "Something went wrong. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <main className="care-auth-page">
@@ -37,7 +119,7 @@ export default function Signup() {
 
         <div className="care-auth-card">
           <form
-            onSubmit={(event) => event.preventDefault()}
+            onSubmit={handleSubmit}
             className="care-auth-form care-auth-signup-form"
           >
             <div className="care-auth-field">
@@ -59,7 +141,12 @@ export default function Signup() {
                   type="text"
                   autoComplete="name"
                   placeholder="Your full name"
+                  minLength={2}
+                  maxLength={150}
+                  value={fullName}
+                  onChange={(event) => setFullName(event.target.value)}
                   required
+                  disabled={isSubmitting}
                   className="care-auth-input"
                 />
               </div>
@@ -84,7 +171,10 @@ export default function Signup() {
                   type="email"
                   autoComplete="email"
                   placeholder="you@example.com"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                   required
+                  disabled={isSubmitting}
                   className="care-auth-input"
                 />
               </div>
@@ -110,7 +200,11 @@ export default function Signup() {
                   autoComplete="new-password"
                   placeholder="Create a password"
                   minLength={8}
+                  maxLength={128}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
                   required
+                  disabled={isSubmitting}
                   className="care-auth-input care-auth-password-input"
                 />
 
@@ -154,7 +248,12 @@ export default function Signup() {
                   type={showConfirmPassword ? "text" : "password"}
                   autoComplete="new-password"
                   placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={(event) =>
+                    setConfirmPassword(event.target.value)
+                  }
                   required
+                  disabled={isSubmitting}
                   className="care-auth-input care-auth-password-input"
                 />
 
@@ -179,36 +278,32 @@ export default function Signup() {
               </div>
             </div>
 
+            {error && (
+              <p role="alert" className="care-auth-error">
+                {error}
+              </p>
+            )}
+
             <button
               type="submit"
-              disabled
+              disabled={isSubmitting}
               className="care-auth-submit"
             >
-              Create Account
+              {isSubmitting ? "Creating account..." : "Create Account"}
               <ArrowRight size={18} />
             </button>
-
-            <p className="care-auth-coming-soon">
-              Account creation is coming soon.
-            </p>
           </form>
 
           <div className="care-auth-card-footer">
             Already have an account?{" "}
-            <Link
-              to="/login"
-              className="care-auth-link"
-            >
+            <Link to="/login" className="care-auth-link">
               Sign in
             </Link>
           </div>
         </div>
 
         <div className="care-auth-bottom">
-          <Link
-            to="/chat"
-            className="care-auth-link"
-          >
+          <Link to="/chat" className="care-auth-link">
             Continue as guest
           </Link>
 
