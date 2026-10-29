@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useSyncExternalStore } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -12,9 +12,18 @@ import {
 } from "lucide-react";
 
 import { sendChatMessage } from "../services/chatApi";
-import "../styles/chat.css";
+import {
+  createConversation,
+  getConversation,
+  getConversations,
+  sendConversationMessage,
+} from "../services/conversationApi";
+import {
+  getCurrentUser,
+  subscribeToAuth,
+} from "../services/authSession";
 
-const STORAGE_KEY = "carepath-guest-chat";
+import "../styles/chat.css";
 
 const welcomeMessage = {
   id: "welcome",
@@ -38,9 +47,25 @@ function getInitialMessages(initialQuestion) {
   ];
 }
 
+function displayMessages(savedMessages) {
+  return [
+    welcomeMessage,
+    ...savedMessages.map((message) => ({
+      id: message.id,
+      role: message.role,
+      content: message.content,
+    })),
+  ];
+}
+
 export default function Chat() {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const user = useSyncExternalStore(
+    subscribeToAuth,
+    getCurrentUser
+  );
 
   const initialQuestion =
     typeof location.state?.initialQuestion === "string"
@@ -51,20 +76,18 @@ export default function Chat() {
     getInitialMessages(initialQuestion)
   );
 
+  const [conversationId, setConversationId] = useState(null);
   const [input, setInput] = useState("");
-  const [isSending, setIsSending] = useState(Boolean(initialQuestion));
+  const [isSending, setIsSending] = useState(false);
+  const [isLoading, setIsLoading] = useState(Boolean(user));
   const [error, setError] = useState("");
+  const [saveStatus, setSaveStatus] = useState("");
 
   const requestVersion = useRef(0);
   const initialRequestStarted = useRef(false);
+  const conversationIdRef = useRef(null);
 
   useEffect(() => {
-    try {
-      sessionStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // Continue if browser storage is unavailable.
-    }
-
     if (initialQuestion) {
       navigate(location.pathname, {
         replace: true,
@@ -74,34 +97,115 @@ export default function Chat() {
   }, [initialQuestion, navigate, location.pathname]);
 
   useEffect(() => {
-    if (!initialQuestion || initialRequestStarted.current) {
+    const version = ++requestVersion.current;
+
+    async function restoreConversation() {
+      setError("");
+      setSaveStatus("");
+      setConversationId(null);
+      conversationIdRef.current = null;
+      setMessages(getInitialMessages(initialQuestion));
+
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+
+      try {
+        const conversations = await getConversations();
+
+        if (version !== requestVersion.current) return;
+
+        if (initialQuestion) {
+          setIsLoading(false);
+          return;
+        }
+
+        if (conversations.length === 0) {
+          setMessages([welcomeMessage]);
+          setIsLoading(false);
+          return;
+        }
+
+        const latestConversation = await getConversation(
+          conversations[0].id
+        );
+
+        if (version !== requestVersion.current) return;
+
+        conversationIdRef.current = latestConversation.id;
+        setConversationId(latestConversation.id);
+        setMessages(displayMessages(latestConversation.messages));
+      } catch {
+        if (version === requestVersion.current) {
+          setError(
+            "Unable to load your saved conversations. Please try refreshing."
+          );
+        }
+      } finally {
+        if (version === requestVersion.current) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    restoreConversation();
+
+    return () => {
+      requestVersion.current += 1;
+    };
+  }, [user, initialQuestion]);
+
+  useEffect(() => {
+    if (!initialQuestion || initialRequestStarted.current || isLoading) {
       return;
     }
 
     initialRequestStarted.current = true;
 
-    const version = requestVersion.current;
+    async function sendInitialQuestion() {
+      const version = requestVersion.current;
 
-    async function loadInitialResponse() {
+      setIsSending(true);
+      setError("");
+
       try {
-        const reply = await sendChatMessage(initialQuestion);
+        if (user) {
+          const conversation = await createConversation();
 
-        if (version !== requestVersion.current) {
-          return;
+          if (version !== requestVersion.current) return;
+
+          conversationIdRef.current = conversation.id;
+          setConversationId(conversation.id);
+
+          const updated = await sendConversationMessage(
+            conversation.id,
+            initialQuestion
+          );
+
+          if (version !== requestVersion.current) return;
+
+          setMessages(displayMessages(updated.messages));
+        } else {
+          const reply = await sendChatMessage(initialQuestion);
+
+          if (version !== requestVersion.current) return;
+
+          setMessages((previous) => [
+            ...previous,
+            {
+              id: crypto.randomUUID(),
+              role: "assistant",
+              content: reply,
+            },
+          ]);
         }
-
-        setMessages((previous) => [
-          ...previous,
-          {
-            id: crypto.randomUUID(),
-            role: "assistant",
-            content: reply,
-          },
-        ]);
       } catch {
         if (version === requestVersion.current) {
           setError(
-            "CarePath couldn't connect to the server. Please try again."
+            "CarePath couldn't send your message. Please try again."
           );
         }
       } finally {
@@ -111,20 +215,21 @@ export default function Chat() {
       }
     }
 
-    loadInitialResponse();
-  }, [initialQuestion]);
+    sendInitialQuestion();
+  }, [initialQuestion, isLoading, user]);
 
-  const sendMessage = async (event) => {
+  async function sendMessage(event) {
     event.preventDefault();
 
     const question = input.trim();
 
-    if (!question || isSending) return;
+    if (!question || isSending || isLoading) return;
 
     const version = requestVersion.current;
 
     setInput("");
     setError("");
+    setSaveStatus("");
     setIsSending(true);
 
     setMessages((previous) => [
@@ -137,24 +242,57 @@ export default function Chat() {
     ]);
 
     try {
-      const reply = await sendChatMessage(question);
+      if (user) {
+        let activeId = conversationIdRef.current;
 
-      if (version !== requestVersion.current) {
-        return;
+        if (!activeId) {
+          const conversation = await createConversation();
+
+          if (version !== requestVersion.current) return;
+
+          activeId = conversation.id;
+          conversationIdRef.current = activeId;
+          setConversationId(activeId);
+        }
+
+        const updated = await sendConversationMessage(
+          activeId,
+          question
+        );
+
+        if (version !== requestVersion.current) return;
+
+        setMessages(displayMessages(updated.messages));
+        setSaveStatus("Conversation saved automatically.");
+      } else {
+        const reply = await sendChatMessage(question);
+
+        if (version !== requestVersion.current) return;
+
+        setMessages((previous) => [
+          ...previous,
+          {
+            id: crypto.randomUUID(),
+            role: "assistant",
+            content: reply,
+          },
+        ]);
       }
-
-      setMessages((previous) => [
-        ...previous,
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: reply,
-        },
-      ]);
     } catch {
       if (version === requestVersion.current) {
         setError(
-          "CarePath couldn't connect to the server. Please try again."
+          "Unable to send or save your message. Please try again."
+        );
+        setInput(question);
+        setMessages((previous) =>
+          previous.filter(
+            (message) =>
+              !(
+                message.role === "user" &&
+                message.content === question &&
+                typeof message.id === "string"
+              )
+          )
         );
       }
     } finally {
@@ -162,9 +300,9 @@ export default function Chat() {
         setIsSending(false);
       }
     }
-  };
+  }
 
-  const handleKeyDown = (event) => {
+  function handleKeyDown(event) {
     if (
       event.key === "Enter" &&
       !event.shiftKey &&
@@ -172,25 +310,45 @@ export default function Chat() {
     ) {
       event.preventDefault();
 
-      if (input.trim() && !isSending) {
+      if (input.trim() && !isSending && !isLoading) {
         event.currentTarget.form?.requestSubmit();
       }
     }
-  };
+  }
 
-  const newChat = () => {
+  function newChat() {
     requestVersion.current += 1;
 
+    conversationIdRef.current = null;
+    setConversationId(null);
     setMessages([welcomeMessage]);
     setInput("");
     setError("");
+    setSaveStatus("");
     setIsSending(false);
+    setIsLoading(false);
 
     navigate(location.pathname, {
       replace: true,
       state: null,
     });
-  };
+  }
+
+  function handleSaveChat() {
+    if (!user) {
+      navigate("/signup");
+      return;
+    }
+
+    if (!conversationId) {
+      setSaveStatus(
+        "Start a conversation first. Your messages will save automatically."
+      );
+      return;
+    }
+
+    setSaveStatus("Your conversation is saved to your account.");
+  }
 
   return (
     <main className="care-chat-page">
@@ -211,10 +369,14 @@ export default function Chat() {
               New Chat
             </button>
 
-            <Link to="/signup" className="care-chat-save">
+            <button
+              type="button"
+              onClick={handleSaveChat}
+              className="care-chat-save"
+            >
               <Save size={17} />
               Save Chat
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -228,49 +390,52 @@ export default function Chat() {
               <h1 className="care-chat-heading">
                 CarePath Assistant
               </h1>
+
               <p className="care-chat-session">
-                Guest session · Not saved
+                {user
+                  ? `Signed in as ${user.full_name} · Auto-save enabled`
+                  : "Guest session · Not saved"}
               </p>
             </div>
           </div>
 
-          <div
-            aria-live="polite"
-            className="care-chat-messages"
-          >
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`care-chat-message-row ${
-                  message.role === "user"
-                    ? "care-chat-message-user"
-                    : "care-chat-message-assistant"
-                }`}
-              >
-                {message.role === "assistant" && (
-                  <div className="care-chat-avatar">
-                    <MessageCircle size={19} />
-                  </div>
-                )}
-
+          <div aria-live="polite" className="care-chat-messages">
+            {isLoading ? (
+              <p className="chat-status">
+                Loading your conversation...
+              </p>
+            ) : (
+              messages.map((message) => (
                 <div
-                  className={`care-chat-bubble ${
+                  key={message.id}
+                  className={`care-chat-message-row ${
                     message.role === "user"
-                      ? "care-chat-bubble-user"
-                      : "care-chat-bubble-assistant"
+                      ? "care-chat-message-user"
+                      : "care-chat-message-assistant"
                   }`}
                 >
-                  {message.content}
+                  {message.role === "assistant" && (
+                    <div className="care-chat-avatar">
+                      <MessageCircle size={19} />
+                    </div>
+                  )}
+
+                  <div
+                    className={`care-chat-bubble ${
+                      message.role === "user"
+                        ? "care-chat-bubble-user"
+                        : "care-chat-bubble-assistant"
+                    }`}
+                  >
+                    {message.content}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           <div className="care-chat-composer">
-            <form
-              onSubmit={sendMessage}
-              className="care-chat-form"
-            >
+            <form onSubmit={sendMessage} className="care-chat-form">
               <label
                 htmlFor="chat-input"
                 className="care-chat-sr-only"
@@ -281,19 +446,18 @@ export default function Chat() {
               <textarea
                 id="chat-input"
                 value={input}
-                onChange={(event) =>
-                  setInput(event.target.value)
-                }
+                onChange={(event) => setInput(event.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Describe how you're feeling..."
                 rows={2}
                 maxLength={2000}
+                disabled={isSending || isLoading}
                 className="care-chat-input"
               />
 
               <button
                 type="submit"
-                disabled={!input.trim() || isSending}
+                disabled={!input.trim() || isSending || isLoading}
                 aria-label="Send message"
                 className="care-chat-send"
               >
@@ -310,6 +474,12 @@ export default function Chat() {
             {error && (
               <p role="alert" className="chat-error">
                 {error}
+              </p>
+            )}
+
+            {saveStatus && (
+              <p role="status" className="chat-status">
+                {saveStatus}
               </p>
             )}
 
