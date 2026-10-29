@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 
 from app.database.session import get_db
 from app.models.user import User
-from app.schemas.auth import SignupRequest, UserResponse
-from app.security.password import hash_password
+from app.schemas.auth import LoginRequest, SignupRequest, UserResponse
+from app.security.password import hash_password, verify_password
 
 router = APIRouter(prefix="/api/v1/auth", tags=["Authentication"])
 
@@ -58,3 +58,31 @@ def signup(
         )
 
     return new_user
+
+
+@router.post("/login", response_model=UserResponse)
+def login(
+    data: LoginRequest,
+    db: Session = Depends(get_db),
+):
+    email = str(data.email).lower()
+
+    user = db.scalar(
+        select(User).where(User.email == email)
+    )
+
+    if not user or not verify_password(
+        data.password, user.password_hash
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password",
+        )
+
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="This account is disabled",
+        )
+
+    return user
