@@ -211,6 +211,38 @@
   line-height: 1.7;
 }
 
+.care-topic-section + .care-topic-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.care-topic-section ul {
+  padding-left: 24px;
+  list-style: disc;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.care-topic-section li + li {
+  margin-top: 8px;
+}
+
+.care-topic-citations a {
+  color: #0f766e;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.care-topic-panel .care-topic-citations {
+  font-size: 14px;
+}
+
+.care-topic-citations a:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 4px;
+}
+
 .care-library-disclaimer {
   display: flex;
   align-items: flex-start;
