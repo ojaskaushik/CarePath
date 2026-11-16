@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Pharmacies from "./pages/Pharmacies";
 import HowItWorksPage from "./pages/HowItWorksPage";
 import Profile from "./pages/Profile";
+import HealthLibrary from "./pages/HealthLibrary";
 
 import {
   isAuthLoading,
@@ -47,6 +48,8 @@ export default function App() {
         <Route path="/chat" element={<Chat />} />
 
         <Route path="/profile" element={<Profile />} />
+
+        <Route path="/health-library" element={<HealthLibrary />} />
 
         <Route
           path="/how-it-works"
