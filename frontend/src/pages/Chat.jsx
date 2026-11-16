@@ -217,6 +217,16 @@ export default function Chat() {
             state: null,
           });
         } else {
+          // Consume the guest handoff before sending, including failed or pending
+          // requests. Preserve router metadata without triggering loadChat again.
+          window.history.replaceState(
+            {
+              ...window.history.state,
+              usr: { ...window.history.state?.usr, initialQuestion: null },
+            },
+            ""
+          );
+
           const reply = await sendChatMessage(initialQuestion);
 
           if (version !== requestVersion.current) return;
@@ -229,11 +239,6 @@ export default function Chat() {
               content: reply,
             },
           ]);
-
-          navigate("/chat", {
-            replace: true,
-            state: null,
-          });
         }
       } catch {
         if (version === requestVersion.current) {
