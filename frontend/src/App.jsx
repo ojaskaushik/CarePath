@@ -11,6 +11,7 @@ import Pharmacies from "./pages/Pharmacies";
 import HowItWorksPage from "./pages/HowItWorksPage";
 import Profile from "./pages/Profile";
 import HealthLibrary from "./pages/HealthLibrary";
+import HealthTopic from "./pages/HealthTopic";
 
 import {
   isAuthLoading,
@@ -50,6 +51,8 @@ export default function App() {
         <Route path="/profile" element={<Profile />} />
 
         <Route path="/health-library" element={<HealthLibrary />} />
+
+        <Route path="/health-library/:slug" element={<HealthTopic />} />
 
         <Route
           path="/how-it-works"
