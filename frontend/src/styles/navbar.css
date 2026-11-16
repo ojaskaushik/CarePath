@@ -71,7 +71,7 @@
 
 .care-navbar-link:hover,
 .care-navbar-link.active {
-  color: #0d9488;
+  color: #0f766e;
 }
 
 /* Authentication Buttons */
@@ -148,7 +148,7 @@
 
 .care-navbar-mobile-link:hover,
 .care-navbar-mobile-link.active {
-  color: #0d9488;
+  color: #0f766e;
 }
 
 .care-navbar-mobile-actions {

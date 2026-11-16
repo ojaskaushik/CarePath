@@ -139,7 +139,7 @@ export const healthTopics = [
           id: "emergency-signs",
           title: "Emergency warning signs",
           paragraphs: [
-            "Call 911 in Canada for a sudden, extremely painful headache, or headache with a seizure, weakness, difficulty speaking, confusion, or loss of vision. A headache with a very high fever and stiff neck, or following a head injury, also needs immediate emergency assessment.",
+            "Call 911 in Canada for a sudden, extremely painful headache, or headache with a seizure, weakness, difficulty speaking, confusion, or loss of vision. Seek immediate emergency care for a headache with any of these signs: very high fever, a stiff neck, or discomfort from bright lights. These signs do not need to occur together. A headache after a head injury within the past three months also needs immediate emergency assessment.",
           ],
           sourceIds: ["nhs", "medlineplus"],
         },

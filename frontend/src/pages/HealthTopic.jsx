@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, BookOpen, ExternalLink, ShieldCheck } from "lucide-react";
 
@@ -7,6 +8,15 @@ import "../styles/health-library.css";
 export default function HealthTopic() {
   const { slug } = useParams();
   const topic = healthTopics.find((item) => item.slug === slug);
+  const pageTitle = `${topic ? topic.name : "Topic not found"} | CarePath`;
+
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = pageTitle;
+    return () => {
+      document.title = previousTitle;
+    };
+  }, [pageTitle]);
 
   return (
     <main className="care-library-page">

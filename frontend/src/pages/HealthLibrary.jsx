@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, BookOpen, Search, ShieldCheck } from "lucide-react";
 
@@ -7,6 +7,21 @@ import "../styles/health-library.css";
 
 export default function HealthLibrary() {
   const [query, setQuery] = useState("");
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = "Health Library | CarePath";
+    return () => {
+      document.title = previousTitle;
+    };
+  }, []);
+
+  function clearSearch() {
+    setQuery("");
+    searchInputRef.current?.focus();
+  }
+
   const search = query.trim().toLowerCase();
   const matchingTopics = healthTopics.filter((topic) =>
     [topic.name, topic.description, ...topic.keywords].some((text) =>
@@ -35,6 +50,7 @@ export default function HealthLibrary() {
           <div className="care-library-search-field">
             <Search size={21} aria-hidden="true" />
             <input
+              ref={searchInputRef}
               id="health-topic-search"
               type="search"
               placeholder="Try a topic or keyword, such as pollen"
@@ -74,7 +90,7 @@ export default function HealthLibrary() {
             <Search size={30} aria-hidden="true" />
             <h2>No topics found</h2>
             <p>Try another topic or keyword, or clear your search to see all topics.</p>
-            <button type="button" onClick={() => setQuery("")}>
+            <button type="button" onClick={clearSearch}>
               Clear search
             </button>
           </div>
