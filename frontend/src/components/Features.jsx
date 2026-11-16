@@ -10,9 +10,11 @@ import "../styles/home.css";
 const features = [
   {
     icon: HeartHandshake,
-    title: "Self-Care Guidance",
+    title: "Health Library",
     description:
-      "Planned: educational self-care resources. Personalized health guidance is not available yet.",
+      "Browse six source-backed articles: common cold, headaches, sore throat, seasonal allergies, dehydration, and constipation.",
+    to: "/health-library",
+    actionLabel: "Browse Health Library",
     color: "bg-emerald-50",
     iconColor: "text-emerald-600",
   },
@@ -40,7 +42,7 @@ export default function Features() {
       <div className="care-features-container">
         <div className="care-features-header">
           <span className="care-features-badge">
-            What We're Building
+            Explore CarePath
           </span>
 
           <h2 className="care-features-title">
@@ -49,8 +51,8 @@ export default function Features() {
           </h2>
 
           <p className="care-features-description">
-            Demo chat and saved conversations are available now.
-            Health resources, medication information, and live
+            Browse the Health Library or try demo chat and saved conversations.
+            Personalized health guidance, medication integration, and live
             pharmacy discovery are still in development.
           </p>
         </div>

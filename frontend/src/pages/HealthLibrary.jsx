@@ -24,8 +24,9 @@ export default function HealthLibrary() {
           </span>
           <h1>Health Library</h1>
           <p>
-            Explore common health topics. This is a preview of the library;
-            topic articles and source links will be available in a future update.
+            Browse six source-backed educational articles about common health
+            topics, with general self-care information, warning signs, and
+            links to trusted sources.
           </p>
         </header>
 
@@ -62,7 +63,7 @@ export default function HealthLibrary() {
                 <h2>{topic.name}</h2>
                 <p>{topic.description}</p>
                 <span className="care-library-card-action">
-                  Article coming soon
+                  Read article
                   <ArrowRight size={18} aria-hidden="true" />
                 </span>
               </Link>

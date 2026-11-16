@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import "../styles/home.css";
 
 const cardColors = {
@@ -25,12 +26,15 @@ export default function FeatureCard({
   description,
   color,
   iconColor,
+  to,
+  actionLabel = "In development",
 }) {
   const backgroundClass = cardColors[color] || "care-feature-teal";
   const iconClass = iconColors[iconColor] || "care-icon-teal";
+  const Card = to ? Link : "article";
 
   return (
-    <article className="care-feature-card">
+    <Card to={to} className={`care-feature-card${to ? " care-feature-card-link" : ""}`}>
       <div className={`care-feature-icon ${backgroundClass}`}>
         <Icon
           size={27}
@@ -46,9 +50,9 @@ export default function FeatureCard({
       </p>
 
       <div className="care-feature-action">
-        <span>In development</span>
+        <span>{actionLabel}</span>
         <ArrowUpRight size={17} />
       </div>
-    </article>
+    </Card>
   );
 }

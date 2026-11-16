@@ -862,3 +862,20 @@
     transition: none;
   }
 }
+
+.care-feature-card-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.care-hero-library-link {
+  color: #0f766e;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.care-feature-card-link:focus-visible,
+.care-hero-library-link:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 4px;
+}

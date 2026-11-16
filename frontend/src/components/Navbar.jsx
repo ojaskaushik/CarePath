@@ -20,6 +20,7 @@ import "../styles/navbar.css";
 
 const links = [
   { label: "Home", path: "/" },
+  { label: "Health Library", path: "/health-library" },
   { label: "How It Works", path: "/how-it-works" },
   { label: "Find Pharmacies", path: "/pharmacies" },
 ];

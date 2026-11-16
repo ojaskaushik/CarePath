@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   ArrowRight,
@@ -53,9 +53,11 @@ export default function Hero() {
         </h1>
 
         <p className="care-hero-description">
-          Try our demo chat as a guest, or sign in to save and
-          manage conversations. Personalized health guidance,
-          medication information, and live pharmacy search are in development.
+          <Link to="/health-library" className="care-hero-library-link">
+            Browse six educational health articles
+          </Link>, or try our demo chat below. Sign in to save conversations.
+          Personalized guidance, medication integration, and live pharmacy
+          search are still in development.
         </p>
 
         <form onSubmit={handleSearch} className="care-hero-search">

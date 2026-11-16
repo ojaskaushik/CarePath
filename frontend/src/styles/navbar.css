@@ -58,7 +58,7 @@
 .care-navbar-links {
   display: none;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
 }
 
 .care-navbar-link {
@@ -186,7 +186,7 @@
 
 /* Responsive Layout */
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .care-navbar-links,
   .care-navbar-actions {
     display: flex;

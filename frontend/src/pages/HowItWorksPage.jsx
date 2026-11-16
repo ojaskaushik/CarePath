@@ -29,13 +29,13 @@ const steps = [
   {
     number: "02",
     icon: BookOpen,
-    title: "Health Information — Planned",
+    title: "Browse the Health Library",
     description:
-      "Educational health resources and personalized guidance are still in development. The demo does not assess symptoms.",
+      "Browse six source-backed educational articles without an account. Personalized health guidance remains in development; chat still uses a preset demo response.",
     details: [
-      "Planned: common symptom information",
-      "Planned: general self-care resources",
-      "Planned: guidance on seeking professional care",
+      "Common cold, headaches, and sore throat",
+      "Seasonal allergies, dehydration, and constipation",
+      "General self-care, warning signs, and links to trusted sources",
     ],
   },
   {
@@ -104,9 +104,10 @@ export default function HowItWorksPage() {
           </h1>
 
           <p className="care-how-hero-description">
-            Try demo chat without an account, or sign in to save
-            and manage conversations. Health resources and live
-            pharmacy discovery are still in development.
+            Browse six educational health articles or try demo chat without
+            an account. Sign in to save and manage conversations.
+            Personalized guidance, medication integration, and live pharmacy
+            discovery are still in development.
           </p>
 
           <Link to="/chat" className="care-how-primary-button">
@@ -132,8 +133,8 @@ export default function HowItWorksPage() {
             </h2>
 
             <p className="care-how-section-description">
-              Explore today's demo and the health-information
-              features we're planning next.
+              Explore the Health Library, demo chat, and the features
+              we're planning next.
             </p>
           </div>
 
@@ -254,8 +255,8 @@ export default function HowItWorksPage() {
       <div className="care-how-disclaimer">
         <p className="care-how-disclaimer-content">
           <ShieldCheck size={15} />
-          CarePath currently offers demo conversations and
-          does not replace professional medical care.
+          CarePath offers general educational information and demo chat.
+          It does not replace professional medical care.
         </p>
       </div>
     </main>

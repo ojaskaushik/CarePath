@@ -39,8 +39,8 @@ export default function HowItWorks() {
           </h2>
 
           <p className="care-steps-description">
-            Start a demo chat, save conversations when signed in,
-            and return to them from your profile.
+            Browse six source-backed educational articles, try demo chat,
+            and manage saved conversations from your profile.
           </p>
         </div>
 
