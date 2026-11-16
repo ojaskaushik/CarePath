@@ -12,9 +12,8 @@ import {
   UserRound,
 } from "lucide-react";
 
+import { API_BASE_URL } from "../services/apiConfig";
 import "../styles/auth.css";
-
-const API_BASE_URL = "http://localhost:8000";
 
 export default function Signup() {
   const navigate = useNavigate();

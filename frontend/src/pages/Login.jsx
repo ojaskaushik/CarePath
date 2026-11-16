@@ -12,9 +12,8 @@ import {
 } from "lucide-react";
 
 import { setAuthSession } from "../services/authSession";
+import { API_BASE_URL } from "../services/apiConfig";
 import "../styles/auth.css";
-
-const API_BASE_URL = "http://localhost:8000";
 
 export default function Login() {
   const navigate = useNavigate();
