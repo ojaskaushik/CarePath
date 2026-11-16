@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 
 from app.models.chat import ChatRequest, ChatResponse
 
@@ -19,6 +19,12 @@ DEVELOPMENT_REPLY = (
 
 @router.post("/", response_model=ChatResponse)
 def send_message(request: ChatRequest):
+    if not request.message.strip():
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Message cannot be empty",
+        )
+
     return ChatResponse(
         reply=DEVELOPMENT_REPLY,
     )

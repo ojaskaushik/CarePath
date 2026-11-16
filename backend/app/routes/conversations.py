@@ -76,9 +76,17 @@ def create_conversation(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    title = data.title.strip()
+
+    if not title:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Conversation title cannot be empty",
+        )
+
     conversation = Conversation(
         user_id=current_user.id,
-        title=data.title.strip(),
+        title=title,
     )
 
     db.add(conversation)

@@ -8,6 +8,23 @@ from app.routes.chat import DEVELOPMENT_REPLY
 BASE = "/api/v1/conversations"
 
 
+@pytest.mark.parametrize("title", ["   ", "\t\n\r", "\u2003"])
+def test_create_rejects_whitespace_only_titles(authenticated_client, title):
+    response = authenticated_client.post(BASE, json={"title": title})
+    assert response.status_code == 422
+    assert response.json() == {"detail": "Conversation title cannot be empty"}
+    assert authenticated_client.get(BASE).json() == []
+
+
+def test_create_accepts_and_trims_valid_title(authenticated_client):
+    response = authenticated_client.post(BASE, json={"title": " \tMy conversation\n "})
+    assert response.status_code == 201
+    assert response.json()["title"] == "My conversation"
+    saved = authenticated_client.get(f"{BASE}/{response.json()['id']}")
+    assert saved.status_code == 200
+    assert saved.json()["title"] == "My conversation"
+
+
 def test_create_and_retrieve_conversation(authenticated_client, conversation):
     client = authenticated_client
     assert conversation["title"] == "New conversation"
