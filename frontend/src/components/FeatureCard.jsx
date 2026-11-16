@@ -46,7 +46,7 @@ export default function FeatureCard({
       </p>
 
       <div className="care-feature-action">
-        <span>Explore more</span>
+        <span>In development</span>
         <ArrowUpRight size={17} />
       </div>
     </article>

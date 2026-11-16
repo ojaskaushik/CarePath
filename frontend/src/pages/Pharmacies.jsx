@@ -19,7 +19,7 @@ const benefits = [
     icon: MapPin,
     title: "Search by Location",
     description:
-      "Enter your city or postal code to begin finding pharmacies in your area.",
+      "Enter a city or postal code to try the preview. Live location search is not connected yet.",
   },
   {
     icon: Clock3,
@@ -31,7 +31,7 @@ const benefits = [
     icon: Store,
     title: "Discover Local Options",
     description:
-      "Find convenient pharmacy locations and compare available information before visiting.",
+      "Planned: live listings to help you explore nearby pharmacy options.",
   },
 ];
 
@@ -51,17 +51,17 @@ export default function Pharmacies() {
         <div className="care-pharmacies-hero-container">
           <span className="care-pharmacies-badge">
             <Navigation size={16} />
-            Pharmacy Discovery
+            Pharmacy Search Preview
           </span>
 
           <h1 className="care-pharmacies-title">
-            Find a Pharmacy
-            <span>Near You.</span>
+            Pharmacy Search,
+            <span>Coming Soon.</span>
           </h1>
 
           <p className="care-pharmacies-intro">
-            Discover local pharmacy options and access useful
-            information to help you plan your next visit.
+            Try the location-entry preview. Live pharmacy
+            listings, addresses, and opening hours are not available yet.
           </p>
 
           <PharmacySearch onSearch={handleSearch} />

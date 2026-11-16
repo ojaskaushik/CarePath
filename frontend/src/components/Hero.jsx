@@ -53,9 +53,9 @@ export default function Hero() {
         </h1>
 
         <p className="care-hero-description">
-          Have a health question? Explore reliable information,
-          discover self-care options, and find pharmacies near you.
-          No account required to get started.
+          Try our demo chat as a guest, or sign in to save and
+          manage conversations. Personalized health guidance,
+          medication information, and live pharmacy search are in development.
         </p>
 
         <form onSubmit={handleSearch} className="care-hero-search">
@@ -119,7 +119,7 @@ export default function Hero() {
 
           <span>
             <HeartPulse size={19} />
-            Health information
+            Demo chat
           </span>
 
           <span>
@@ -129,8 +129,8 @@ export default function Hero() {
         </div>
 
         <p className="care-hero-disclaimer">
-          CarePath provides educational information, not medical
-          diagnosis or treatment. If you are experiencing a medical
+          Chat uses a preset demo response, not a medical
+          assessment. If you are experiencing a medical
           emergency, call 911 in Canada.
         </p>
       </div>

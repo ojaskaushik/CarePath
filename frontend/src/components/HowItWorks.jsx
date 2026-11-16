@@ -5,23 +5,23 @@ const steps = [
   {
     number: "01",
     icon: MessageCircle,
-    title: "Tell Us How You Feel",
+    title: "Try the Demo Chat",
     description:
-      "Describe your health concern in your own words. No account is needed to get started.",
+      "Send a question and receive a preset demo response. Guest chats are temporary and need no account.",
   },
   {
     number: "02",
     icon: BookOpenCheck,
-    title: "Explore Helpful Information",
+    title: "Save Your Conversations",
     description:
-      "Review evidence-based self-care information, medication resources, and important safety guidance.",
+      "Create an account and sign in to save new conversations automatically.",
   },
   {
     number: "03",
     icon: MapPinned,
-    title: "Find Your Next Step",
+    title: "Manage Your History",
     description:
-      "Explore nearby pharmacies and find useful resources to help you decide what to do next.",
+      "Reopen, continue, rename, or delete saved conversations from your profile.",
   },
 ];
 
@@ -39,8 +39,8 @@ export default function HowItWorks() {
           </h2>
 
           <p className="care-steps-description">
-            Three simple steps to explore health information
-            and discover useful resources.
+            Start a demo chat, save conversations when signed in,
+            and return to them from your profile.
           </p>
         </div>
 

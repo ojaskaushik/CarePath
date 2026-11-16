@@ -19,7 +19,7 @@ const steps = [
     icon: MessageCircle,
     title: "Tell Us How You're Feeling",
     description:
-      "Start by describing your health concern in your own words. Whether it's a headache, cough, or another common concern, CarePath provides a simple place to begin.",
+      "Try a conversation in your own words. Chat currently returns a preset demo response, not personalized health guidance.",
     details: [
       "No account required to get started",
       "Ask questions in everyday language",
@@ -29,37 +29,37 @@ const steps = [
   {
     number: "02",
     icon: BookOpen,
-    title: "Explore Health Information",
+    title: "Health Information — Planned",
     description:
-      "Our goal is to help you understand common health concerns through accessible, evidence-based educational resources and appropriate safety guidance.",
+      "Educational health resources and personalized guidance are still in development. The demo does not assess symptoms.",
     details: [
-      "Understand common symptoms",
-      "Explore general self-care information",
-      "Recognize when professional care may be needed",
+      "Planned: common symptom information",
+      "Planned: general self-care resources",
+      "Planned: guidance on seeking professional care",
     ],
   },
   {
     number: "03",
     icon: HeartPulse,
-    title: "Learn About OTC Medications",
+    title: "Medication Information — Planned",
     description:
-      "Explore information about over-the-counter medications, including their common uses and important precautions, to support informed conversations with healthcare professionals.",
+      "Over-the-counter medication information is planned. Medication data and recommendations are not available yet.",
     details: [
-      "Understand what different medications are used for",
-      "Learn about general safety precautions",
-      "Know when to ask a pharmacist or clinician",
+      "Planned: common medication uses",
+      "Planned: general safety precautions",
+      "Planned: resources for discussions with a pharmacist",
     ],
   },
   {
     number: "04",
     icon: MapPin,
-    title: "Find Nearby Pharmacies",
+    title: "Pharmacy Search — Preview",
     description:
-      "Search for pharmacies by city or postal code. As our pharmacy directory develops, you'll be able to explore location details and useful contact information.",
+      "Try entering a city or postal code in the search preview. Live results and pharmacy details are not connected yet.",
     details: [
-      "Search using a Canadian city or postal code",
-      "Explore pharmacy location information",
-      "Plan your next pharmacy visit",
+      "Available: location-entry preview",
+      "Planned: live pharmacy listings",
+      "Planned: addresses, hours, and contact details",
     ],
   },
 ];
@@ -69,13 +69,13 @@ const benefits = [
     icon: UserRound,
     title: "Guest-First Access",
     description:
-      "Explore the demonstration chat without creating an account. Saving conversations will require signing in when accounts become available.",
+      "Try demo chat without an account. Create an account and sign in to save new conversations automatically.",
   },
   {
     icon: ShieldCheck,
-    title: "Privacy-Conscious Design",
+    title: "Manage Your Conversations",
     description:
-      "Guest conversations aren't saved to an account. We're developing additional privacy controls before introducing persistent chat history.",
+      "Reopen, continue, rename, or delete saved chats from your profile. Guest chats are temporary and disappear on refresh.",
   },
   {
     icon: BookOpen,
@@ -104,9 +104,9 @@ export default function HowItWorksPage() {
           </h1>
 
           <p className="care-how-hero-description">
-            CarePath is designed to make health information easier
-            to explore, helping you understand your options and
-            discover useful resources along the way.
+            Try demo chat without an account, or sign in to save
+            and manage conversations. Health resources and live
+            pharmacy discovery are still in development.
           </p>
 
           <Link to="/chat" className="care-how-primary-button">
@@ -128,12 +128,12 @@ export default function HowItWorksPage() {
             </span>
 
             <h2 className="care-how-section-title">
-              Four Steps Toward Better Understanding
+              Available Now and Coming Next
             </h2>
 
             <p className="care-how-section-description">
-              Here's how CarePath is being designed to support
-              your health-information journey.
+              Explore today's demo and the health-information
+              features we're planning next.
             </p>
           </div>
 
@@ -254,7 +254,7 @@ export default function HowItWorksPage() {
       <div className="care-how-disclaimer">
         <p className="care-how-disclaimer-content">
           <ShieldCheck size={15} />
-          CarePath provides educational information only and
+          CarePath currently offers demo conversations and
           does not replace professional medical care.
         </p>
       </div>
