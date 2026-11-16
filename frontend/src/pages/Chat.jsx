@@ -543,7 +543,7 @@ export default function Chat() {
               </p>
             )}
 
-            {saveStatus && (
+            {user && saveStatus && (
               <p role="status" className="chat-status">
                 {saveStatus}
               </p>

@@ -1,3 +1,4 @@
+import { clearAuthSession } from "./authSession";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
@@ -13,6 +14,11 @@ async function apiRequest(path = "", options = {}) {
       ...options.headers,
     },
   });
+
+  if (response.status === 401) {
+    clearAuthSession();
+    throw new Error("Your session has expired. Please sign in again.");
+  }
 
   if (response.status === 204) {
     return null;

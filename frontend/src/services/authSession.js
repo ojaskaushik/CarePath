@@ -82,7 +82,7 @@ export async function signOut() {
       }
     );
 
-    if (!response.ok) {
+    if (!response.ok && response.status !== 401) {
       throw new Error("Unable to sign out");
     }
 
